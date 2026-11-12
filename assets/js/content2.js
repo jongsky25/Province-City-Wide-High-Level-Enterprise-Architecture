@@ -110,7 +110,7 @@
       { id: "other", name: "Other sources", note: "donations, partners", value: 20, color: "var(--muted)" }
     ],
     uses: [
-      { id: "pop", name: "Community health programs", note: "vaccines, outbreak control, health education", weight: 20, unitCost: 0.0006, unitLabel: "people reached" },
+      { id: "pop", name: "Community health programs", note: "vaccines, outbreak control, health education", weight: 20, unitCost: 0.0004, unitLabel: "people reached" },
       { id: "care", name: "Care for patients", note: "check-ups, medicines, hospital care", weight: 40, unitCost: 0.0012, unitLabel: "patient visits" },
       { id: "staff", name: "Health workers", note: "added nurses, midwives, doctors and incentives", weight: 20, unitCost: 0.45, unitLabel: "health workers for a year" },
       { id: "build", name: "Buildings and equipment", note: "health stations, hospital equipment", weight: 12, unitCost: 6, unitLabel: "health stations upgraded" },
@@ -155,16 +155,6 @@
         office: "Run early warning for outbreaks and disasters. Share lessons with other provinces.",
         clinics: "Care pathways improve based on results.",
         ai: "Early warning, what-if planning, and help with outcome-based payments." }
-    ],
-    first100: [
-      "Convene the Provincial Health Board and name one person responsible for the connected system.",
-      "Sign data-sharing and referral agreements with the towns, the city and private clinics.",
-      "Put the shared road and AI services in the Special Health Fund plan as shared services for every town.",
-      "List every facility and health worker, and check them against the national lists.",
-      "Start one quick AI win: reading paper logbooks in three pilot towns.",
-      "Pick one journey to fix first, such as safe births, and measure it every month.",
-      "Publish a simple privacy notice so families know how their information is protected.",
-      "Ask the scoreboard one question at every Health Board meeting."
     ]
   };
 

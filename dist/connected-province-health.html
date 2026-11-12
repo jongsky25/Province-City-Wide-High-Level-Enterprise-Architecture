@@ -128,7 +128,7 @@ section { padding-block: 56px; }
 
 .isnot { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
 .flip { perspective: 900px; border: 0; background: none; padding: 0; cursor: pointer; text-align: left; min-height: 190px; }
-.flip-inner { position: relative; width: 100%; height: 100%; min-height: 190px; transition: transform .55s cubic-bezier(.2,.7,.2,1); transform-style: preserve-3d; }
+.flip-inner { display: block; position: relative; width: 100%; height: 100%; min-height: 190px; transition: transform .55s cubic-bezier(.2,.7,.2,1); transform-style: preserve-3d; }
 .flip[aria-pressed="true"] .flip-inner { transform: rotateY(180deg); }
 .face { position: absolute; inset: 0; backface-visibility: hidden; border-radius: var(--radius); padding: 18px; display: flex; flex-direction: column; gap: 8px; }
 .face.front { background: var(--surface); border: 1.5px solid var(--line); }
@@ -295,7 +295,8 @@ svg[data-lens="care"] .place:not(.on-care) , svg[data-lens="money"] .place:not(.
 .play-row { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
 .play-row input[type=range] { flex: 1 1 160px; accent-color: var(--ai); }
 .yr-out { font-family: var(--f-display); font-weight: 700; min-width: 70px; font-variant-numeric: tabular-nums; }
-.illus { font-size: .8rem; color: var(--muted); }
+.illus { font-size: .86rem; color: var(--ink); background: var(--surface-2); border-left: 4px solid var(--sun); border-radius: 0 8px 8px 0; padding: 8px 12px; max-width: 820px; }
+.illus::before { content: "Example only"; font-family: var(--f-tech); font-size: .68rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); display: block; }
 .summary-line { font-weight: 700; }
 .summary-line .ai-t { color: var(--ai); }
 
@@ -460,7 +461,11 @@ footer .wrap { display: grid; gap: 8px; }
 .gantt-wrap { overflow-x: auto; margin-top: 18px; }
 .gantt { min-width: 680px; display: grid; gap: 6px; }
 .g-row { display: grid; grid-template-columns: 250px minmax(0, 1fr); gap: 12px; align-items: center; }
-.g-name { font-weight: 600; font-size: .92rem; }
+.g-name { font-weight: 600; font-size: .92rem; text-align: left; background: none; border: 0; border-radius: 6px; padding: 4px 6px; margin-left: -6px; cursor: pointer; text-decoration: underline; text-decoration-color: var(--line); text-underline-offset: 3px; }
+.g-head .g-name { cursor: default; }
+button.g-name:hover { background: var(--surface-2); }
+button.g-name[aria-pressed="true"] { background: var(--ink); color: var(--surface); text-decoration: none; }
+.g-lane[data-track] { cursor: pointer; }
 .g-lane { position: relative; height: 30px; background: repeating-linear-gradient(90deg, var(--surface) 0 calc(12.5% - 1px), var(--line) calc(12.5% - 1px) 12.5%); border-radius: 6px; }
 .g-head .g-lane { background: none; height: 22px; }
 .g-head .g-lane span { position: absolute; top: 0; text-align: center; font-family: var(--f-tech); font-size: .72rem; color: var(--muted); }
@@ -523,6 +528,105 @@ footer .wrap { display: grid; gap: 8px; }
   .m-pot { position: static; }
 }
 
+
+/* ---------- Future tag and notes ---------- */
+.tag-future { display: inline-block; font-family: var(--f-tech); font-size: .64rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--ai); border: 1.5px solid var(--ai); border-radius: 999px; padding: 0 7px; margin-right: 6px; vertical-align: middle; line-height: 1.6; background: var(--surface); }
+button[aria-pressed="true"] .tag-future { background: transparent; color: inherit; border-color: currentColor; }
+.future-note { background: var(--ai-soft); border: 1.5px solid var(--ai); border-radius: 12px; padding: 12px 14px; font-weight: 600; max-width: 760px; }
+
+/* ---------- Start: tour and role shortcuts ---------- */
+.iam { margin-top: 22px; display: grid; gap: 8px; }
+.iam-label { font-weight: 700; }
+.iam-chips { display: flex; gap: 6px; flex-wrap: wrap; }
+a.chip { text-decoration: none; color: var(--ink); }
+.next-page { display: flex; justify-content: flex-end; padding-bottom: 40px; }
+.next-page:empty { display: none; }
+
+.tour { position: fixed; left: 0; right: 0; bottom: 0; z-index: 40; background: var(--ink); color: var(--surface); padding: 12px 0 calc(12px + env(safe-area-inset-bottom, 0px)); box-shadow: 0 -6px 24px rgba(0,0,0,.25); }
+.tour-in { display: flex; gap: 16px; align-items: center; justify-content: space-between; flex-wrap: wrap; }
+.tour-text { display: grid; gap: 2px; flex: 1 1 320px; min-width: 0; }
+.tour-text .tech { color: var(--surface); opacity: .75; }
+.tour-text strong { font-family: var(--f-display); font-size: 1.1rem; }
+.tour-text p { font-size: .97rem; }
+.tour-ctl { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.tour .btn { background: var(--surface); color: var(--ink); border-color: var(--surface); padding: 8px 16px; }
+.tour .btn.ghost { background: transparent; color: var(--surface); }
+.tour-end { background: none; border: 0; color: var(--surface); text-decoration: underline; cursor: pointer; padding: 8px; }
+body.touring { padding-bottom: 150px; }
+
+/* ---------- Roadmap decision panel ---------- */
+.rm-detail { margin-top: 16px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.rm-detail > div { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 14px; display: grid; gap: 4px; align-content: start; }
+.rm-detail b { font-family: var(--f-tech); font-size: .7rem; letter-spacing: .08em; text-transform: uppercase; font-weight: 500; color: var(--muted); }
+.rm-detail .rd-head { grid-column: 1 / -1; border-left: 4px solid var(--ink); }
+
+/* ---------- Your part ---------- */
+.roles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.roles button { text-align: left; display: flex; gap: 12px; align-items: center; border: 1.5px solid var(--line); background: var(--surface); border-radius: 12px; padding: 10px 14px; cursor: pointer; }
+.roles button .avatar { width: 36px; height: 36px; font-size: .8rem; flex: none; }
+.roles button strong { font-family: var(--f-display); line-height: 1.2; }
+.roles button[aria-pressed="true"] { border-color: var(--ink); box-shadow: inset 0 0 0 1px var(--ink); }
+.role-head { margin-top: 24px; display: grid; gap: 6px; max-width: 760px; }
+.role-head h3 { font-size: 1.5rem; }
+.role-head p { font-size: 1.1rem; color: var(--muted); }
+.todo-bar { display: flex; gap: 12px; justify-content: space-between; align-items: center; flex-wrap: wrap; margin-top: 16px; }
+.todo-btns { display: flex; gap: 8px; flex-wrap: wrap; }
+.todo-btns .btn { padding: 7px 14px; font-size: .92rem; }
+.when-h { font-family: var(--f-tech); font-size: .8rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--teal); margin: 26px 0 10px; }
+.todo { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.todo-item { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 14px 16px; display: grid; gap: 12px; }
+.todo-item label { display: flex; gap: 12px; align-items: flex-start; cursor: pointer; }
+.todo-item input { width: 22px; height: 22px; flex: none; margin-top: 2px; accent-color: var(--teal); }
+.todo-do { font-family: var(--f-display); font-weight: 700; font-size: 1.1rem; line-height: 1.25; }
+.todo-item input:checked + .todo-do { color: var(--muted); text-decoration: line-through; }
+.todo-item dl { margin: 0 0 0 34px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.todo-item dt { font-family: var(--f-tech); font-size: .68rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.todo-item dd { margin: 2px 0 0; font-size: .95rem; }
+.todo-item .done dt { color: var(--teal); }
+#view-todo .illus { margin-top: 24px; }
+
+/* ---------- Map on phones: wider than the screen, swipe to pan ---------- */
+.swipe-hint { display: none; }
+@media (max-width: 760px) {
+  .map-layout > * { min-width: 0; }
+  .map-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .map-stage .map-scroll svg { width: 760px; max-width: none; }
+  .lbl.lv-province { font-size: 19px; }
+  .lbl.lbl-sub.lv-province { font-size: 15px; }
+  .swipe-hint { display: block; font-size: .8rem; color: var(--muted); padding: 0 8px 8px; text-align: center; }
+  .roles { grid-template-columns: 1fr 1fr; }
+  .rm-detail, .todo-item dl { grid-template-columns: 1fr; }
+  .todo-item dl { margin-left: 0; }
+  .tour-ctl { width: 100%; }
+  body.touring { padding-bottom: 230px; }
+  .next-page { justify-content: stretch; }
+  .next-page .btn { width: 100%; justify-content: center; }
+}
+@media (max-width: 420px) { .roles { grid-template-columns: 1fr; } }
+
+/* ---------- Print: only the print sheet, always light ---------- */
+#print-sheet { display: none; }
+@media print {
+  :root, :root:not([data-theme="light"]), :root[data-theme="dark"] { --bg: #fff; --surface: #fff; --ink: #111; --muted: #444; --line: #999; color-scheme: light; }
+  body { background: #fff; color: #111; font-size: 11pt; padding: 0 !important; }
+  body::before { display: none; }
+  body > *:not(#print-sheet) { display: none !important; }
+  #print-sheet { display: block; }
+  .ps-page { break-after: page; }
+  .ps-page:last-child { break-after: auto; }
+  .ps-page h1 { font-size: 18pt; margin-bottom: 4pt; }
+  .ps-page h2 { font-size: 13pt; margin: 14pt 0 6pt; }
+  .ps-sub { color: #444; font-size: 9.5pt; margin: 4pt 0 10pt; }
+  .ps-points { margin: 0; display: grid; gap: 8pt; }
+  .ps-points dt { font-weight: 700; }
+  .ps-points dd { margin: 0; }
+  .ps-table { width: 100%; border-collapse: collapse; font-size: 9.5pt; }
+  .ps-table th, .ps-table td { border: 1px solid #999; padding: 5pt 6pt; text-align: left; vertical-align: top; }
+  .ps-table tr { break-inside: avoid; }
+  .ps-box { display: inline-block; width: 11pt; height: 11pt; border: 1.5px solid #111; }
+  @page { margin: 14mm; }
+}
+
 </style>
 </head>
 <body>
@@ -540,6 +644,7 @@ footer .wrap { display: grid; gap: 8px; }
       <a href="#journeys">Journeys</a>
       <a href="#money">Money</a>
       <a href="#roadmap">Roadmap</a>
+      <a href="#todo">Your part</a>
       <a href="#glossary">Glossary</a>
     </nav>
   </div>
@@ -555,8 +660,12 @@ footer .wrap { display: grid; gap: 8px; }
         <h1>Every clinic keeps its own house. <em>All of them share one road.</em></h1>
         <p class="lede">This is a plain guide to how a province or city health system should work under the Universal Health Care Act. Families, health workers, mayors and governors can see how the pieces connect, and how AI helps the towns that are behind get ahead.</p>
         <div class="actions">
-          <a class="btn" href="#map">Explore the province</a>
-          <a class="btn ghost" href="#gap">See how AI closes the gaps</a>
+          <button type="button" class="btn" id="tour-start">Take the 5-minute tour</button>
+          <a class="btn ghost" href="#map">Explore the province</a>
+        </div>
+        <div class="iam">
+          <p class="iam-label">Or go straight to what you need to do. I am a:</p>
+          <div class="iam-chips" id="iam"></div>
         </div>
       </div>
       <div class="hero-art" aria-hidden="true">
@@ -622,7 +731,8 @@ footer .wrap { display: grid; gap: 8px; }
     <div class="section-head">
       <p class="eyebrow">Where AI fits</p>
       <h2 id="h-ai">Don't wait in line. Close the gap now.</h2>
-      <p class="muted">The usual plan makes towns that start behind go step by step, and they stay behind. We use AI right where each gap is, while the foundations are built at the same time.</p>
+      <p class="muted">The usual plan makes towns that start behind go step by step, and they stay behind. The proposal is to use AI right where each gap is, while the foundations are built at the same time.</p>
+      <p class="future-note"><span class="tag-future">Future</span>Everything this guide says about AI is a picture of what could happen. It is not in use in this province today, and the results have not been measured.</p>
     </div>
     <div class="ai-teaser">
       <div class="path-card usual">
@@ -677,7 +787,8 @@ footer .wrap { display: grid; gap: 8px; }
     <div class="map-layout">
       <div>
         <div class="map-stage">
-          <svg id="map-svg" viewBox="290 150 1030 740" data-zoom="province" data-lens="none" role="img" aria-label="Illustrated map of the Province of Bagong Pag-asa"></svg>
+          <div class="map-scroll" id="map-scroll"><svg id="map-svg" viewBox="290 150 1030 740" data-zoom="province" data-lens="none" role="img" aria-label="Illustrated map of the Province of Bagong Pag-asa"></svg></div>
+          <p class="swipe-hint">Swipe sideways to see the whole province</p>
           <div class="zoom-note" id="zoom-note"></div>
           <div class="legend" id="legend" hidden></div>
         </div>
@@ -706,14 +817,15 @@ footer .wrap { display: grid; gap: 8px; }
   <section class="wrap" style="padding-bottom:24px">
     <div class="section-head">
       <p class="eyebrow">Close the gap with AI</p>
-      <h2>Catch up, and get ahead</h2>
+      <h2>Catch up, and keep up</h2>
       <p class="muted">Pick a place, then press Play. The dashed line is where every town should be. It keeps rising, because health needs and technology keep moving.</p>
+      <p class="future-note"><span class="tag-future">Future</span>This page shows what could happen, not what has happened. The AI tools here are not in use in this province today. Every score is made up to show the idea, and none of it is measured data.</p>
     </div>
     <div class="gap-top">
       <div style="display:grid;gap:16px">
         <div class="profiles" id="profiles"></div>
         <p class="summary-line" id="gap-summary" aria-live="polite"></p>
-        <p class="illus">Numbers are illustrative, made up to show the idea. They are not measured data.</p>
+        <p class="illus">Numbers are made up to show the idea. They are not measured data.</p>
       </div>
       <div class="chart-card">
         <svg id="gap-chart" viewBox="0 0 560 300" role="img" aria-label="Line chart comparing readiness over six years"></svg>
@@ -845,7 +957,7 @@ footer .wrap { display: grid; gap: 8px; }
     <div class="section-head">
       <p class="eyebrow">The roadmap</p>
       <h2>Build the road and use AI at the same time</h2>
-      <p class="muted">Switch between the usual order and the leapfrog plan. Purple bars are AI helpers.</p>
+      <p class="muted">Switch between the usual order and the leapfrog plan. Tap any line to see the decision it needs and who makes it. Purple bars are AI helpers, which are a future proposal.</p>
     </div>
     <div class="mode-switch" role="group" aria-label="Which plan">
       <button type="button" id="rm-usual" aria-pressed="false">The usual order</button>
@@ -853,7 +965,8 @@ footer .wrap { display: grid; gap: 8px; }
     </div>
     <div class="gantt-wrap"><div class="gantt" id="gantt"></div></div>
     <p class="summary-line" id="rm-summary" aria-live="polite"></p>
-    <p class="illus">Timelines are illustrative.</p>
+    <p class="illus">Timelines are examples, not commitments.</p>
+    <div class="rm-detail" id="rm-detail" aria-live="polite"></div>
   </section>
 
   <section class="wrap" aria-labelledby="h-stages">
@@ -868,12 +981,35 @@ footer .wrap { display: grid; gap: 8px; }
 
   <section class="wrap" aria-labelledby="h-100">
     <div class="section-head">
-      <p class="eyebrow">For the Governor or Mayor</p>
-      <h2 id="h-100">The first 100 days</h2>
-      <p class="muted">Tick them off as you go. Your ticks are saved in this browser only.</p>
+      <p class="eyebrow">What happens first</p>
+      <h2 id="h-100">Everyone has a part in the first 100 days</h2>
+      <p class="muted">The Governor or Mayor, the Health Board, the health office, facility heads, health workers and families each have their own short list.</p>
     </div>
-    <ul class="checklist" id="first100"></ul>
-    <p class="in-short"><span>In short</span>Don't wait for perfect foundations before using AI. Build the shared road, the agreements and the fund while AI closes gaps from the first year.</p>
+    <a class="btn" href="#todo">See your list</a>
+    <p class="in-short"><span>In short</span>Don't wait for perfect foundations. Build the shared road, the agreements and the fund from the first year, and place AI helpers at the gaps as they prove safe.</p>
+  </section>
+</div>
+
+<!-- ================= YOUR PART ================= -->
+<div class="view" id="view-todo" hidden>
+  <section class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">Your part</p>
+      <h2>What do I need to do?</h2>
+      <p class="muted">Pick who you are. Each step says what to do, with whom, by when, what it costs, and how you know it is done.</p>
+    </div>
+    <div class="roles" id="roles" role="group" aria-label="Who are you?"></div>
+    <div class="role-head" id="role-head" aria-live="polite"></div>
+    <div class="todo-bar">
+      <p class="todo-progress" id="todo-progress" aria-live="polite"></p>
+      <div class="todo-btns">
+        <button type="button" class="btn ghost" id="print-role">Print my list</button>
+        <button type="button" class="btn ghost" id="print-all">Print all lists</button>
+      </div>
+    </div>
+    <div id="todo-list"></div>
+    <p class="illus">These are suggested first steps for the example province. They are not official DOH guidance. Costs are described in words because real amounts depend on your province. Your ticks are saved in this browser only.</p>
+    <p class="in-short"><span>In short</span>Leaders sign and fund. The health office lists and connects. Facilities plug in. Health workers record once and stay in charge. Families bring their ID and ask who sees their record.</p>
   </section>
 </div>
 
@@ -897,13 +1033,31 @@ footer .wrap { display: grid; gap: 8px; }
     <div class="ref-table-wrap"><table class="ref-table" id="refs"><thead><tr><th>Document</th><th>Year</th><th>Status</th></tr></thead><tbody></tbody></table></div>
   </section>
 </div>
+<nav class="wrap next-page" id="next-page" aria-label="Next page"></nav>
 </main>
+
+<aside class="tour" id="tour" hidden aria-label="Guided tour">
+  <div class="wrap tour-in">
+    <div class="tour-text" aria-live="polite">
+      <span class="tech" id="tour-count"></span>
+      <strong id="tour-title"></strong>
+      <p id="tour-text"></p>
+    </div>
+    <div class="tour-ctl">
+      <button type="button" class="btn ghost" id="tour-prev">Back</button>
+      <button type="button" class="btn" id="tour-next">Next</button>
+      <button type="button" class="tour-end" id="tour-end">End tour</button>
+    </div>
+  </div>
+</aside>
 
 <footer>
   <div class="wrap">
     <p>An explainer based on the Universal Health Care Act (RA 11223, Secs. 17–20 and 36) and the DOH Health Sector Enterprise Architecture. It is not an official DOH publication. The Province of Bagong Pag-asa, Mabuhay City, the people, and all numbers are fictional examples.</p>
   </div>
 </footer>
+
+<div id="print-sheet"></div>
 
 <script>
 /* All page content lives here so non-developers can edit it.
@@ -1349,7 +1503,7 @@ window.CH = {
       { id: "other", name: "Other sources", note: "donations, partners", value: 20, color: "var(--muted)" }
     ],
     uses: [
-      { id: "pop", name: "Community health programs", note: "vaccines, outbreak control, health education", weight: 20, unitCost: 0.0006, unitLabel: "people reached" },
+      { id: "pop", name: "Community health programs", note: "vaccines, outbreak control, health education", weight: 20, unitCost: 0.0004, unitLabel: "people reached" },
       { id: "care", name: "Care for patients", note: "check-ups, medicines, hospital care", weight: 40, unitCost: 0.0012, unitLabel: "patient visits" },
       { id: "staff", name: "Health workers", note: "added nurses, midwives, doctors and incentives", weight: 20, unitCost: 0.45, unitLabel: "health workers for a year" },
       { id: "build", name: "Buildings and equipment", note: "health stations, hospital equipment", weight: 12, unitCost: 6, unitLabel: "health stations upgraded" },
@@ -1394,16 +1548,6 @@ window.CH = {
         office: "Run early warning for outbreaks and disasters. Share lessons with other provinces.",
         clinics: "Care pathways improve based on results.",
         ai: "Early warning, what-if planning, and help with outcome-based payments." }
-    ],
-    first100: [
-      "Convene the Provincial Health Board and name one person responsible for the connected system.",
-      "Sign data-sharing and referral agreements with the towns, the city and private clinics.",
-      "Put the shared road and AI services in the Special Health Fund plan as shared services for every town.",
-      "List every facility and health worker, and check them against the national lists.",
-      "Start one quick AI win: reading paper logbooks in three pilot towns.",
-      "Pick one journey to fix first, such as safe births, and measure it every month.",
-      "Publish a simple privacy notice so families know how their information is protected.",
-      "Ask the scoreboard one question at every Health Board meeting."
     ]
   };
 
@@ -1461,6 +1605,257 @@ window.CH = {
 
 </script>
 <script>
+/* Content for "Your part" (what each person needs to do), the guided tour,
+   and the decision behind each roadmap bar.
+   These are suggested starting lists for the fictional province. They are not official DOH guidance.
+   Costs are described in words on purpose: no peso figures are invented here. */
+(function (CH) {
+
+  /* when: 30 = first 30 days, 100 = first 100 days, 365 = first year */
+  CH.whenLabels = { 30: "First 30 days", 100: "First 100 days", 365: "First year" };
+
+  CH.roles = [
+    { id: "leader", name: "Governor or Mayor", short: "Governor / Mayor", initials: "G", color: "var(--ink)",
+      line: "You make it one system. Nobody else can sign the agreements or open the fund.",
+      actions: [
+        { when: 30, do: "Convene the Health Board and name one person responsible for the connected system.",
+          withWho: "Provincial or City Health Officer, mayors, a private hospital representative",
+          cost: "No new money. One meeting and one written order.",
+          done: "The order is signed, and the person reports at every Board meeting." },
+        { when: 100, do: "Sign the agreements that make the towns, the city and private clinics one network.",
+          withWho: "Mayors, hospital chiefs, private clinic owners, your legal office",
+          cost: "Staff and legal time.",
+          done: "Every town and the main private providers have signed referral and data-sharing agreements." },
+        { when: 100, do: "Open the Special Health Fund and put the shared road and shared AI services in its plan.",
+          withWho: "Treasurer, budget officer, health office, PhilHealth",
+          cost: "Paid once from the pooled fund, for every town. Not bought town by town.",
+          done: "The fund has an approved plan with a line for shared digital services." },
+        { when: 100, do: "Pick one journey to fix first, such as safe births, and one number to watch.",
+          withWho: "Health Board, health office",
+          cost: "No new money.",
+          done: "The number is shown at every Board meeting, by town." },
+        { when: 100, do: "Publish a simple privacy notice so families know who can see their records.",
+          withWho: "Data protection officer, information office",
+          cost: "Small. Printing and posting.",
+          done: "The notice is posted in every health facility and online." },
+        { when: 365, do: "Ask the scoreboard one question at every Board meeting, and act on the answer.",
+          withWho: "Health Board",
+          cost: "No new money.",
+          done: "Board minutes record the question, the answer and the decision taken." }
+      ] },
+
+    { id: "board", name: "Health Board member", short: "Health Board", initials: "HB", color: "var(--sky)",
+      line: "You keep it honest. You decide the rules, the priorities and where the pooled money goes.",
+      actions: [
+        { when: 30, do: "Agree the rule: any clinic app is welcome if it follows the shared standards. No one is forced onto one product.",
+          withWho: "Health office, hospital chiefs, private providers",
+          cost: "No new money.",
+          done: "The rule is in a Board resolution." },
+        { when: 100, do: "Approve the Special Health Fund plan with shared services listed as one item for all towns.",
+          withWho: "Treasurer, budget officer, health office",
+          cost: "Decides how pooled money is used. No extra cost to decide.",
+          done: "The approved plan shows what each town receives from the shared services." },
+        { when: 100, do: "Choose the ten numbers the province will watch.",
+          withWho: "Health office, a health worker and a patient representative",
+          cost: "No new money.",
+          done: "The list is published and the same ten appear at every meeting." },
+        { when: 100, do: "Set the AI rules: a person decides, families are told, and every tool is checked before wider use.",
+          withWho: "Health office, data protection officer, clinicians",
+          cost: "Staff time.",
+          done: "A one-page AI policy is approved before any pilot starts." },
+        { when: 365, do: "Review the results once a year and move money to what worked.",
+          withWho: "All Board members, town representatives",
+          cost: "No new money.",
+          done: "Next year's plan shows what changed because of the results." }
+      ] },
+
+    { id: "office", name: "Provincial or City Health Office", short: "Health office", initials: "HO", color: "var(--teal)",
+      line: "You build it. You keep the lists, connect the facilities and run the scoreboard.",
+      actions: [
+        { when: 30, do: "List every facility and every health worker, public and private, and check them against the national lists.",
+          withWho: "Town health officers, DOH regional office",
+          cost: "Staff time.",
+          done: "Every facility and worker on your list matches a national record, or is flagged to be fixed." },
+        { when: 30, do: "Find out what each facility uses today: paper, a spreadsheet or a clinic app.",
+          withWho: "Facility heads",
+          cost: "Staff time. A one-page survey.",
+          done: "You have one table: facility, what it uses, and whether it can share data." },
+        { when: 100, do: "Name a data protection officer and prepare the data-sharing agreement for the Governor to sign.",
+          withWho: "Legal office, National Privacy Commission guidance",
+          cost: "Staff time.",
+          done: "The officer is named and the draft agreement is with the Governor." },
+        { when: 100, do: "Connect the first facilities for one journey: the referral for a safe birth.",
+          withWho: "Pilot health centers, the provincial hospital, DOH",
+          cost: "From the shared services line of the Special Health Fund.",
+          done: "A referral sent from a pilot health center arrives at the hospital before the patient does." },
+        { when: 365, do: "Run the scoreboard and send each town its own page every month.",
+          withWho: "Town health officers",
+          cost: "Staff time once the first facilities are connected.",
+          done: "Every mayor receives a monthly page and the Board sees the province view." },
+        { when: 365, do: "Train every facility to use the numbers, not only to submit them.",
+          withWho: "Facility heads, DOH regional office, a local university",
+          cost: "Training days and travel.",
+          done: "Each facility has at least one person who can read its own page and explain it." }
+      ] },
+
+    { id: "facility", name: "Hospital chief or health center head", short: "Facility head", initials: "F", color: "var(--ai)",
+      line: "You keep your own system. Your job is to plug it into the shared road.",
+      actions: [
+        { when: 30, do: "Tell the health office what you use today and what it can share.",
+          withWho: "Your records staff, your software supplier if you have one",
+          cost: "No new money.",
+          done: "Your facility's line in the province survey is complete." },
+        { when: 100, do: "Ask your software supplier in writing: can this system send and receive records in the national standard?",
+          withWho: "Your supplier, the health office",
+          cost: "No new money to ask. The answer tells you what an upgrade may cost.",
+          done: "You have a written answer with a date." },
+        { when: 100, do: "Use the one health ID for every patient at registration.",
+          withWho: "Registration and records staff",
+          cost: "Staff time. A short orientation.",
+          done: "New patient records carry the health ID." },
+        { when: 100, do: "Send referrals ahead, and send the result back to the clinic that referred.",
+          withWho: "The clinics and hospitals you refer to and receive from",
+          cost: "No new money once connected.",
+          done: "The referring clinic receives a summary for every referred patient." },
+        { when: 365, do: "Check PhilHealth claims before they are sent.",
+          withWho: "Billing staff, PhilHealth local office",
+          cost: "Staff time. Fewer returned claims pays it back.",
+          done: "Fewer claims come back for errors than last year." }
+      ] },
+
+    { id: "worker", name: "Nurse, midwife or barangay health worker", short: "Health worker", initials: "N", color: "var(--coral)",
+      line: "You are the one families trust. The tools are there to save you time, not to replace your judgment.",
+      actions: [
+        { when: 30, do: "Tell your supervisor which forms you fill in more than once.",
+          withWho: "Your supervisor, other health workers",
+          cost: "No new money.",
+          done: "Your list of repeated forms reaches the health office." },
+        { when: 100, do: "Ask each patient for their health ID and record it at every visit.",
+          withWho: "Families in your area",
+          cost: "No new money.",
+          done: "The patients you saw this month have an ID on record." },
+        { when: 100, do: "Enter each visit once, on the phone or the clinic app, when your facility is connected.",
+          withWho: "Your facility head",
+          cost: "A phone and signal, provided by the facility.",
+          done: "You no longer copy the same visit into separate logbooks." },
+        { when: 365, do: "When an AI helper suggests something, check it. You decide, and you can overrule it.",
+          withWho: "Your supervising nurse or doctor",
+          cost: "No new money. Time to learn the tool.",
+          done: "You can say when you followed a suggestion and when you did not, and why." },
+        { when: 365, do: "Report what does not work: no signal, wrong suggestions, slow screens.",
+          withWho: "Facility head, health office",
+          cost: "No new money.",
+          done: "Your report gets an answer." }
+      ] },
+
+    { id: "family", name: "Family or patient", short: "Family", initials: "R", color: "var(--sun)",
+      line: "The system is yours. A few small steps help your record follow you.",
+      actions: [
+        { when: 30, do: "Get your national ID, and bring it to the health center.",
+          withWho: "Your family, the barangay",
+          cost: "Free.",
+          done: "The health center has your ID on your record." },
+        { when: 30, do: "Register with one health center or clinic as your first stop for care.",
+          withWho: "Your barangay health worker, PhilHealth",
+          cost: "Free.",
+          done: "You know the name of your health center and it knows you." },
+        { when: 100, do: "Ask who can see your health record, and say yes or no to sharing.",
+          withWho: "The nurse or midwife at your health center",
+          cost: "Free.",
+          done: "You have been told, in words you understand, who can see your record." },
+        { when: 100, do: "When you are referred, ask: was my record sent ahead?",
+          withWho: "The clinic that refers you",
+          cost: "Free.",
+          done: "The hospital already has your history when you arrive." },
+        { when: 365, do: "Tell the barangay or the health center what went wrong and what went right.",
+          withWho: "Barangay health worker, barangay council",
+          cost: "Free.",
+          done: "Your feedback is written down and passed on." }
+      ] }
+  ];
+
+  /* Decision behind each roadmap bar, in the same order as CH.roadmap.tracks */
+  CH.roadmapDetails = [
+    { decision: "Agree to act as one province-wide health system, and open one Special Health Fund.",
+      owner: "Governor or Mayor, with the mayors, through the Health Board",
+      needs: "Nothing. Start here.",
+      basis: "UHC Act, Secs. 19 and 20; DOH AO 2020-0021" },
+    { decision: "Which facilities still have no record system, and who pays for them. Any app is allowed if it follows the shared standards.",
+      owner: "Health office, with each facility head",
+      needs: "The list of every facility and what it uses today.",
+      basis: "UHC Act, Sec. 36" },
+    { decision: "Use the national ID to link each person's records, and name who keeps the local lists up to date.",
+      owner: "Health office, with the DOH regional office",
+      needs: "Signed data-sharing agreements and a named data protection officer.",
+      basis: "RA 11055 (PhilSys); RA 10173 (Data Privacy Act)" },
+    { decision: "The order of connection. Start with one journey, such as referrals for safe births, not with everything at once.",
+      owner: "Health office, with DOH",
+      needs: "Clinic apps that can share, and the shared lists.",
+      basis: "UHC Act, Sec. 36; DOH-PhilHealth joint orders on health data standards (2021)" },
+    { decision: "The ten numbers the province watches, and who sees them.",
+      owner: "Health Board decides. Health office builds it.",
+      needs: "The first connected facilities.",
+      basis: "UHC Act, Sec. 36" },
+    { decision: "Who is trained first, and giving staff the time to learn.",
+      owner: "Health office, with facility heads",
+      needs: "Nothing. Can start in the first months.",
+      basis: "Good practice. No single issuance." },
+    { decision: "Which pilot towns, who confirms what the AI reads, and where the data is kept.",
+      owner: "Health office, with the pilot health centers",
+      needs: "The privacy agreement and the Board's AI rules.",
+      basis: "RA 10173 (Data Privacy Act); WHO guidance on AI for health" },
+    { decision: "Which care guideline comes first, such as prenatal care, and which clinicians sign it off.",
+      owner: "Provincial or City Health Officer, with senior clinicians",
+      needs: "Agreed care guidelines and the list of health workers.",
+      basis: "WHO SMART Guidelines; WHO guidance on AI for health" },
+    { decision: "Who acts when a warning comes, and with what money.",
+      owner: "Health Board, with the disease surveillance team",
+      needs: "Connected data from facilities and the medicine stock system.",
+      basis: "UHC Act, Sec. 17" },
+    { decision: "Review results every year and move the budget to what worked.",
+      owner: "Health Board",
+      needs: "A working scoreboard.",
+      basis: "UHC Act, Sec. 19" }
+  ];
+
+  /* The 5-minute tour. sel = element to bring into view on that page. */
+  CH.tour = [
+    { view: "start", sel: "#h-people", title: "Start with people",
+      text: "Read one card. Red is how it is today. Green is how it is when clinics are connected." },
+    { view: "start", sel: "#h-isnot", title: "Clear up the confusion",
+      text: "Tap a card to flip it. This is one team with one plan. It is not one giant computer system." },
+    { view: "start", sel: "#h-sim", title: "The big idea",
+      text: "Try all three ways, and press \"Cause an outage\" in each. Only one keeps working." },
+    { view: "map", sel: "#map-area", title: "See the whole province",
+      text: "Tap the health center. Then press \"Follow Rosa's journey\" to watch one mother move through the system." },
+    { view: "journeys", sel: "#view-journeys", title: "What changes for a family",
+      text: "Step through Rosa's story today. Then switch to \"Connected\" and watch the trips and costs fall." },
+    { view: "money", sel: "#view-money", title: "Follow the money",
+      text: "Turn \"One pooled fund\" off, then on. Watch how much reaches care." },
+    { view: "gap", sel: "#view-gap", title: "Where AI could help",
+      text: "Pick the island town and press Play. This is a picture of the future, not measured results." },
+    { view: "roadmap", sel: "#view-roadmap", title: "The order of work",
+      text: "Tap any line in the plan to see the decision it needs and who makes it." },
+    { view: "todo", sel: "#view-todo", title: "Your part",
+      text: "Pick who you are. This is your list: what to do, with whom, by when, and how you know it is done." }
+  ];
+
+  /* One-page summary used on the printed sheet */
+  CH.onePage = {
+    title: "Connected Province Health: the one-page summary",
+    points: [
+      ["The problem", "Each town, hospital and clinic keeps its own records and its own budget. A patient's history does not follow the patient, and leaders decide with last year's numbers."],
+      ["The idea", "Connected, not integrated. Every facility keeps its own system. All of them follow shared rules and use a few shared national lists, so information can move."],
+      ["What the law asks", "The Universal Health Care Act (RA 11223) asks towns to join into one province-wide or city-wide health system (Sec. 19) with one Special Health Fund (Sec. 20) and electronic health records (Sec. 36)."],
+      ["Where AI fits", "As a future helper placed at each gap, offered as a shared service so that poorer towns are not left behind. A person makes every decision about care and money."],
+      ["What happens first", "The Health Board meets, the agreements are signed, the fund is opened, every facility is listed, and one journey is fixed and measured."]
+    ]
+  };
+
+})(window.CH);
+
+</script>
+<script>
 (function () {
   "use strict";
   var D = window.CH;
@@ -1487,16 +1882,63 @@ window.CH = {
   function byId(id) { for (var i = 0; i < D.places.length; i++) if (D.places[i].id === id) return D.places[i]; }
 
   /* ---------------- Router ---------------- */
-  var VIEWS = ["start", "map", "gap", "journeys", "money", "roadmap", "glossary"];
-  var inited = {};
+  var VIEWS = ["start", "map", "gap", "journeys", "money", "roadmap", "todo", "glossary"];
+  var PAGE = { start: "Start", map: "Province map", gap: "Close the gap", journeys: "Journeys", money: "Money", roadmap: "Roadmap", todo: "Your part", glossary: "Glossary" };
+  var FUTURE = '<span class="tag-future">Future</span>';
+  var inited = {}, current = null;
+  function store(key, val) {
+    try {
+      if (val === undefined) return JSON.parse(localStorage.getItem(key) || "null");
+      localStorage.setItem(key, JSON.stringify(val));
+    } catch (e) { /* storage unavailable */ }
+    return null;
+  }
   function route() {
-    var h = (location.hash || "").slice(1);
+    var parts = (location.hash || "").slice(1).split("/"), h = parts[0], arg = parts[1];
     if (VIEWS.indexOf(h) < 0) h = "start";
     VIEWS.forEach(function (v) { $("#view-" + v).hidden = v !== h; });
     $$(".nav a").forEach(function (a) { a.setAttribute("aria-current", a.getAttribute("href") === "#" + h ? "page" : "false"); });
-    if (!inited[h]) { inited[h] = true; ({ start: initStart, map: initMap, gap: initGap, journeys: initJourneys, money: initMoney, roadmap: initRoadmap, glossary: initGlossary })[h](); }
+    if (h === "todo" && arg) setRole(arg, true);
+    if (!inited[h]) { inited[h] = true; ({ start: initStart, map: initMap, gap: initGap, journeys: initJourneys, money: initMoney, roadmap: initRoadmap, todo: initTodo, glossary: initGlossary })[h](); }
+    var changed = current !== h; current = h;
+    var nx = VIEWS[VIEWS.indexOf(h) + 1];
+    $("#next-page").innerHTML = (nx && !tour.on) ? '<a class="btn ghost" href="#' + nx + '">Next: ' + PAGE[nx] + ' →</a>' : '';
+    return changed;
   }
-  window.addEventListener("hashchange", function () { route(); window.scrollTo(0, 0); });
+  window.addEventListener("hashchange", function () { if (route() && !tour.on) window.scrollTo(0, 0); });
+
+  /* ---------------- GUIDED TOUR ---------------- */
+  var tour = { on: false, i: 0 };
+  function tourGo(i) {
+    var T = D.tour;
+    if (i < 0) i = 0;
+    if (i >= T.length) { tourEnd(); return; }
+    tour.on = true; tour.i = i;
+    var st = T[i];
+    document.body.classList.add("touring");
+    $("#tour").hidden = false;
+    $("#tour-count").textContent = "Tour · step " + (i + 1) + " of " + T.length;
+    $("#tour-title").textContent = st.title;
+    $("#tour-text").textContent = st.text;
+    $("#tour-prev").disabled = i === 0;
+    $("#tour-next").textContent = i === T.length - 1 ? "Finish" : "Next";
+    if (current !== st.view) { location.hash = "#" + st.view; route(); } else { route(); }
+    var el = $(st.sel);
+    if (el) {
+      var sec = el.closest("section") || el;
+      var top = sec.getBoundingClientRect().top + window.pageYOffset - (window.innerWidth > 760 ? 70 : 8);
+      window.scrollTo({ top: Math.max(0, top), behavior: reduceMotion ? "auto" : "smooth" });
+    }
+  }
+  function tourEnd() {
+    tour.on = false;
+    document.body.classList.remove("touring");
+    $("#tour").hidden = true;
+    route();
+  }
+  $("#tour-prev").addEventListener("click", function () { tourGo(tour.i - 1); });
+  $("#tour-next").addEventListener("click", function () { tourGo(tour.i + 1); });
+  $("#tour-end").addEventListener("click", tourEnd);
 
   /* ---------------- START ---------------- */
   function initStart() {
@@ -1515,6 +1957,9 @@ window.CH = {
     $$("#isnot .flip").forEach(function (b) {
       b.addEventListener("click", function () { b.setAttribute("aria-pressed", b.getAttribute("aria-pressed") === "true" ? "false" : "true"); });
     });
+
+    $("#iam").innerHTML = D.roles.map(function (r) { return '<a class="chip" href="#todo/' + r.id + '">' + esc(r.short) + '</a>'; }).join("");
+    $("#tour-start").addEventListener("click", function () { tourGo(0); });
 
     initSim();
   }
@@ -1913,7 +2358,7 @@ window.CH = {
       '<div class="block"><p>' + esc(p.what) + '</p></div>' +
       '<div class="block today"><b>Today</b><p>' + esc(p.today) + '</p></div>' +
       '<div class="block conn"><b>When connected</b><p>' + esc(p.connected) + '</p></div>' +
-      '<div class="ai-box"><b>AI helper</b><div class="cols"><div><span>Doable in 1–3 years</span>' + esc(p.aiNow) + '</div><div><span>Future vision</span>' + esc(p.aiFuture) + '</div></div>' +
+      '<div class="ai-box"><b>AI helper ' + FUTURE + '</b><div class="cols"><div><span>Could come first</span>' + esc(p.aiNow) + '</div><div><span>Longer-term vision</span>' + esc(p.aiFuture) + '</div></div>' +
       '<p class="guard"><strong>Safeguard:</strong> ' + esc(p.guard) + '</p></div>' +
       '<div class="meta"><span class="pill ' + p.invest + '">' + esc(INVEST[p.invest]) + '</span><span class="tech"><b>What DOH calls this:</b> ' + esc(p.doh) + '</span></div>';
   }
@@ -1930,7 +2375,7 @@ window.CH = {
     $("#rosa-step").textContent = "Step " + (i + 1) + " of " + steps.length;
     $("#rosa-title").textContent = s.title;
     $("#rosa-text").textContent = s.text;
-    $("#rosa-ai").textContent = "AI helper: " + s.ai;
+    $("#rosa-ai").innerHTML = FUTURE + "AI helper: " + esc(s.ai);
     $("#rosa-prev").disabled = i === 0;
     $("#rosa-next").textContent = i === steps.length - 1 ? "Finish" : "Next";
     setLens(s.lens);
@@ -1948,6 +2393,14 @@ window.CH = {
     }
     map.rosaPos = to;
     requestAnimationFrame(step);
+    scrollMapTo(to[0]);
+  }
+  /* On phones the map is wider than the screen: bring a place into view */
+  function scrollMapTo(x) {
+    var sc = $("#map-scroll");
+    if (!sc || sc.scrollWidth <= sc.clientWidth + 1) return;
+    var frac = (x - map.vb[0]) / map.vb[2];
+    sc.scrollTo({ left: Math.max(0, frac * sc.scrollWidth - sc.clientWidth / 2), behavior: reduceMotion ? "auto" : "smooth" });
   }
   function rosaStop() {
     $("#rosa-card").hidden = true;
@@ -1993,7 +2446,8 @@ window.CH = {
   function aiVal(p, i, t, share) {
     var P = D.profiles[p], s = (share === undefined ? gap.share : share);
     var scale = P.capacity + s * (1 - P.capacity), head = (CAPMAX - P.base[i]) / 100;
-    return Math.min(CAPMAX, P.base[i] + 6 * P.capacity * t + CAPS[i].boost * scale * head * Math.max(0, t - 0.5));
+    /* never drawn above the target line: the claim is "closes the gap", not "beats the target" */
+    return Math.min(goal(t), P.base[i] + 6 * P.capacity * t + CAPS[i].boost * scale * head * Math.max(0, t - 0.5));
   }
   function avg(fn) { var s = 0; for (var i = 0; i < CAPS.length; i++) s += fn(i); return s / CAPS.length; }
   function goal(t) { return 100 + 3 * t; }
@@ -2024,10 +2478,10 @@ window.CH = {
     eq.addEventListener("input", function () { gap.share = parseFloat(eq.value); drawGap(); drawEq(); });
 
     $("#gap-cards").innerHTML = D.gaps.map(function (g) {
-      return '<details class="gap-card"><summary><span class="tech">Question ' + (g.cap + 1) + ': ' + esc(CAPS[g.cap].q) + '</span><h3>' + esc(g.title) + '</h3><span class="who">' + esc(g.who) + '</span><span class="open">See the AI fix</span></summary>' +
+      return '<details class="gap-card"><summary><span class="tech">Question ' + (g.cap + 1) + ': ' + esc(CAPS[g.cap].q) + '</span><h3>' + esc(g.title) + '</h3><span class="who">' + esc(g.who) + '</span><span class="open">See the proposed AI fix</span></summary>' +
         '<div class="body"><div class="usual-l"><b>The usual fix</b>' + esc(g.usual) + '</div>' +
-        '<div class="ai-l"><div><b>AI fix, doable in 1–3 years</b>' + esc(g.aiNow) + '</div><div><b>Future vision</b>' + esc(g.aiFuture) + '</div></div>' +
-        '<div class="ahead"><b>How it puts us ahead</b>' + esc(g.ahead) + '</div>' +
+        '<div class="ai-l"><div><b>' + FUTURE + 'AI fix that could come first</b>' + esc(g.aiNow) + '</div><div><b>' + FUTURE + 'Longer-term vision</b>' + esc(g.aiFuture) + '</div></div>' +
+        '<div class="ahead"><b>What it could change</b>' + esc(g.ahead) + '</div>' +
         '<div class="needs"><b>Needs from the shared road</b>' + esc(g.needs) + '</div>' +
         '<div class="guard-l"><b>Safeguard</b>' + esc(g.guard) + '</div></div></details>';
     }).join("");
@@ -2083,7 +2537,7 @@ window.CH = {
     var vu = avg(function (i) { return trad(p, i, t); }), va = avg(function (i) { return aiVal(p, i, t); }), vg = goal(t);
     var ends = [
       { y: sy(goal(6)), txt: "Where we", txt2: "should be", fill: "var(--ink)" },
-      { y: sy(avg(function (i) { return aiVal(p, i, 6); })), txt: "With AI", fill: "var(--ai)" },
+      { y: sy(avg(function (i) { return aiVal(p, i, 6); })), txt: "With AI", txt2: "(future)", fill: "var(--ai)" },
       { y: sy(avg(function (i) { return trad(p, i, 6); })), txt: "The usual", txt2: "way", fill: "var(--muted)" }
     ].sort(function (a, b) { return a.y - b.y; });
     for (var e = 1; e < ends.length; e++) { var need = ends[e - 1].txt2 ? 34 : 22; if (ends[e].y - ends[e - 1].y < need) ends[e].y = ends[e - 1].y + need; }
@@ -2098,7 +2552,7 @@ window.CH = {
     var label = t < 0.05 ? "Today" : "Year " + (Math.round(t * 10) / 10).toFixed(1).replace(".0", "");
     $("#gap-year-out").textContent = label;
     var s = esc(P.name) + ", " + label.toLowerCase() + ": the usual way reaches <b>" + Math.round(vu) + "</b> of the <b>" + Math.round(vg) + "</b> needed. ";
-    s += va >= vg ? '<span class="ai-t">With AI: ' + Math.round(va) + ", ahead of the goal.</span>" : '<span class="ai-t">With AI: ' + Math.round(va) + ".</span>";
+    s += va >= vg - 0.5 ? '<span class="ai-t">With AI it could reach ' + Math.round(va) + ", level with where it should be.</span>" : '<span class="ai-t">With AI it could reach ' + Math.round(va) + ".</span>";
     if (t < 0.05) s = esc(P.name) + " today: readiness " + Math.round(vu) + " out of 100. Press Play to see the next six years.";
     $("#gap-summary").innerHTML = s;
 
@@ -2162,7 +2616,7 @@ window.CH = {
     card.innerHTML = '<span class="tech">Step ' + (jr.step + 1) + ' of ' + j.steps.length + ' · ' + esc(st.where) + '</span>' +
       '<span class="mode-tag">' + (conn ? "Connected, with AI" : "The way it is today") + '</span>' +
       '<h3>' + esc(st.title) + '</h3><p>' + esc(conn ? st.conn : st.today) + '</p>' +
-      (conn ? '<p class="ai-line"><strong>AI helper:</strong> ' + esc(st.ai) + '</p>' : '') +
+      (conn ? '<p class="ai-line">' + FUTURE + '<strong>AI helper:</strong> ' + esc(st.ai) + '</p>' : '') +
       (last ? '<p class="lesson"><strong>In short:</strong> ' + esc(j.lesson) + '</p>' : '');
     $("#jr-prev").disabled = jr.step === 0;
     $("#jr-next").textContent = !last ? "Next step" : (conn ? "Start again" : "Now play it connected");
@@ -2214,13 +2668,13 @@ window.CH = {
   }
 
   /* ---------------- ROADMAP ---------------- */
-  var rm = { mode: "leap", stage: 0 };
+  var rm = { mode: "leap", stage: 0, track: 0 };
   function initRoadmap() {
     var R = D.roadmap, head = '<div class="g-row g-head"><div class="g-name"></div><div class="g-lane">';
     for (var y = 0; y < R.years; y++) head += '<span style="left:' + (y / R.years * 100) + '%;width:' + (100 / R.years) + '%">Year ' + (y + 1) + '</span>';
     head += '</div></div>';
     $("#gantt").innerHTML = head + R.tracks.map(function (t, i) {
-      return '<div class="g-row"><div class="g-name">' + esc(t.name) + '</div><div class="g-lane"><div class="g-bar k-' + t.kind + '" id="gb' + i + '"></div><span class="g-none" id="gn' + i + '">Not reached in 8 years</span></div></div>';
+      return '<div class="g-row"><button type="button" class="g-name" data-track="' + i + '" aria-pressed="false">' + esc(t.name) + (t.kind === "ai" ? " " + FUTURE : "") + '</button><div class="g-lane" data-track="' + i + '"><div class="g-bar k-' + t.kind + '" id="gb' + i + '"></div><span class="g-none" id="gn' + i + '">Not reached in 8 years</span></div></div>';
     }).join("");
     $("#rm-usual").addEventListener("click", function () { rm.mode = "usual"; drawRoadmap(); });
     $("#rm-leap").addEventListener("click", function () { rm.mode = "leap"; drawRoadmap(); });
@@ -2228,17 +2682,8 @@ window.CH = {
       return '<button type="button" data-stage="' + i + '"><span class="tech">Stage ' + (i + 1) + '</span><strong>' + esc(s.name) + '</strong></button>';
     }).join("");
     $$("#stages button").forEach(function (b) { b.addEventListener("click", function () { rm.stage = +b.dataset.stage; drawStage(); }); });
-    var saved = {};
-    try { saved = JSON.parse(localStorage.getItem("cph-first100") || "{}"); } catch (e) { saved = {}; }
-    $("#first100").innerHTML = R.first100.map(function (t, i) {
-      return '<li><label><input type="checkbox" id="f100-' + i + '"' + (saved[i] ? " checked" : "") + '><span>' + esc(t) + '</span></label></li>';
-    }).join("");
-    $$("#first100 input").forEach(function (cb, i) {
-      cb.addEventListener("change", function () {
-        saved[i] = cb.checked;
-        try { localStorage.setItem("cph-first100", JSON.stringify(saved)); } catch (e) { /* storage unavailable */ }
-      });
-    });
+    $$("#gantt [data-track]").forEach(function (b) { b.addEventListener("click", function () { rm.track = +b.dataset.track; drawTrack(); }); });
+    drawTrack();
     drawRoadmap(); drawStage();
   }
   function drawRoadmap() {
@@ -2253,7 +2698,17 @@ window.CH = {
     });
     $("#rm-summary").innerHTML = usual
       ? 'The usual order: AI help reaches health workers only in <b>year 8</b>, and a learning health system is <b>not reached</b> within 8 years.'
-      : '<span class="ai-t">The leapfrog plan: AI is helping health workers in the first year,</span> and the province is learning and improving by <b>year 4</b>.';
+      : '<span class="ai-t">The leapfrog plan: AI could be helping health workers in the first year,</span> and the province could be learning and improving by <b>year 4</b>.';
+  }
+  function drawTrack() {
+    var R = D.roadmap, t = R.tracks[rm.track], d = D.roadmapDetails[rm.track];
+    $$("#gantt button.g-name").forEach(function (b) { b.setAttribute("aria-pressed", +b.dataset.track === rm.track ? "true" : "false"); });
+    $("#rm-detail").innerHTML =
+      '<div class="rd-head"><b>The line you picked</b><h3>' + esc(t.name) + (t.kind === "ai" ? " " + FUTURE : "") + '</h3></div>' +
+      '<div><b>The decision it needs</b><p>' + esc(d.decision) + '</p></div>' +
+      '<div><b>Who decides</b><p>' + esc(d.owner) + '</p></div>' +
+      '<div><b>What must be in place first</b><p>' + esc(d.needs) + '</p></div>' +
+      '<div><b>Basis</b><p>' + esc(d.basis) + '</p></div>';
   }
   function drawStage() {
     var s = D.roadmap.stages[rm.stage];
@@ -2263,11 +2718,69 @@ window.CH = {
       '<div><b>Governor or Mayor</b><p>' + esc(s.leader) + '</p></div>' +
       '<div><b>Health office</b><p>' + esc(s.office) + '</p></div>' +
       '<div><b>Clinics and hospitals</b><p>' + esc(s.clinics) + '</p></div>' +
-      '<div class="sd-ai"><b>AI at this stage</b><p>' + esc(s.ai) + '</p></div>';
+      '<div class="sd-ai"><b>AI at this stage ' + FUTURE + '</b><p>' + esc(s.ai) + '</p></div>';
+  }
+
+  /* ---------------- YOUR PART ---------------- */
+  var todo = { role: (store("cph-role") || "leader"), ticks: (store("cph-todo") || {}) };
+  function roleById(id) { for (var i = 0; i < D.roles.length; i++) if (D.roles[i].id === id) return D.roles[i]; }
+  function setRole(id, quiet) {
+    if (!roleById(id)) return;
+    todo.role = id; store("cph-role", id);
+    if (inited.todo) drawTodo();
+  }
+  function initTodo() {
+    if (!roleById(todo.role)) todo.role = "leader";
+    $("#roles").innerHTML = D.roles.map(function (r) {
+      return '<button type="button" data-role="' + r.id + '"><span class="avatar" style="background:' + r.color + '">' + esc(r.initials) + '</span><strong>' + esc(r.name) + '</strong></button>';
+    }).join("");
+    $$("#roles button").forEach(function (b) { b.addEventListener("click", function () { setRole(b.dataset.role); }); });
+    $("#print-role").addEventListener("click", function () { printSheet([roleById(todo.role)]); });
+    $("#print-all").addEventListener("click", function () { printSheet(D.roles); });
+    drawTodo();
+  }
+  function drawTodo() {
+    var r = roleById(todo.role);
+    $$("#roles button").forEach(function (b) { b.setAttribute("aria-pressed", b.dataset.role === r.id ? "true" : "false"); });
+    $("#role-head").innerHTML = '<h3>' + esc(r.name) + '</h3><p>' + esc(r.line) + '</p>';
+    var html = "", lastWhen = null;
+    r.actions.forEach(function (a, i) {
+      if (a.when !== lastWhen) { html += (lastWhen === null ? "" : "</ol>") + '<h3 class="when-h">' + D.whenLabels[a.when] + '</h3><ol class="todo">'; lastWhen = a.when; }
+      var key = r.id + "-" + i;
+      html += '<li class="todo-item"><label><input type="checkbox" data-key="' + key + '"' + (todo.ticks[key] ? " checked" : "") + '><span class="todo-do">' + esc(a.do) + '</span></label>' +
+        '<dl><div><dt>With whom</dt><dd>' + esc(a.withWho) + '</dd></div><div><dt>What it costs</dt><dd>' + esc(a.cost) + '</dd></div><div class="done"><dt>Done when</dt><dd>' + esc(a.done) + '</dd></div></dl></li>';
+    });
+    $("#todo-list").innerHTML = html + "</ol>";
+    $$("#todo-list input").forEach(function (cb) {
+      cb.addEventListener("change", function () { todo.ticks[cb.dataset.key] = cb.checked; store("cph-todo", todo.ticks); drawProgress(); });
+    });
+    drawProgress();
+  }
+  function drawProgress() {
+    var r = roleById(todo.role), n = 0;
+    r.actions.forEach(function (a, i) { if (todo.ticks[r.id + "-" + i]) n++; });
+    $("#todo-progress").innerHTML = "<b>" + n + " of " + r.actions.length + "</b> done";
+  }
+  function printSheet(roles) {
+    var O = D.onePage;
+    var html = '<section class="ps-page"><h1>' + esc(O.title) + '</h1>' +
+      '<p class="ps-sub">' + esc(D.province) + ' and ' + esc(D.city) + ' are fictional examples. This is not an official DOH publication.</p><dl class="ps-points">' +
+      O.points.map(function (pt) { return '<div><dt>' + esc(pt[0]) + '</dt><dd>' + esc(pt[1]) + '</dd></div>'; }).join("") + '</dl>' +
+      '<h2>Who does what</h2><table class="ps-table"><tbody>' +
+      D.roles.map(function (r) { return '<tr><th>' + esc(r.name) + '</th><td>' + esc(r.line) + '</td></tr>'; }).join("") + '</tbody></table></section>';
+    roles.forEach(function (r) {
+      html += '<section class="ps-page"><h1>' + esc(r.name) + ': what I need to do</h1><p class="ps-sub">' + esc(r.line) + '</p>' +
+        '<table class="ps-table ps-actions"><thead><tr><th></th><th>What to do</th><th>With whom</th><th>By when</th><th>What it costs</th><th>Done when</th></tr></thead><tbody>' +
+        r.actions.map(function (a) {
+          return '<tr><td><span class="ps-box"></span></td><td><b>' + esc(a.do) + '</b></td><td>' + esc(a.withWho) + '</td><td>' + D.whenLabels[a.when] + '</td><td>' + esc(a.cost) + '</td><td>' + esc(a.done) + '</td></tr>';
+        }).join("") + '</tbody></table>' +
+        '<p class="ps-sub">Suggested first steps for the example province. Not official DOH guidance.</p></section>';
+    });
+    $("#print-sheet").innerHTML = html;
+    window.print();
   }
 
   /* ---------------- GLOSSARY ---------------- */
-  var PAGE = { start: "Start", map: "Province map", gap: "Close the gap", journeys: "Journeys", money: "Money", roadmap: "Roadmap", glossary: "Glossary" };
   function initGlossary() {
     var input = $("#g-search");
     input.addEventListener("input", drawGlossary);

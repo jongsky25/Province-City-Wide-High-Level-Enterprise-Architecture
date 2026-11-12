@@ -1,6 +1,6 @@
 # Plan: Connected Province/City-Wide Health System — Interactive Enterprise Architecture
 
-Status: **Phase 5 build-out done**: all eight pages exist (Start, Province Map, Close the Gap, Journeys, Money, Roadmap, Glossary; Connected vs Integrated is part of Start). Next: review and polish. Research results are in `docs/references.md`.
+Status: **Phase 6 in progress**. All pages exist, and a review added: a **Your part** page (role-based to-do lists with owner, deadline, cost and proof of done), a **5-minute guided tour**, **decisions behind each roadmap line**, a **print pack**, and **"Future" labels on every AI claim** (the readiness chart no longer goes above the target line). Fixed: broken flip cards, unreadable map labels on phones, duplicate Money numbers. Still open: confirm the three partly verified references, and run the two-sentence understanding test with real readers. Research results are in `docs/references.md`.
 
 ---
 
