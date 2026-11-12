@@ -109,14 +109,16 @@ Cross-cutting:
 2. **Research**: confirm legal references and section numbers; build `references.json`
 3. **Content model**: write the components, links and journey JSON in plain language
 4. **Prototype**: Start page + Architecture Map + one journey (vertical slice) for review
-5. **Build out**: remaining pages, Filipino translations if wanted
+5. **Build out**: remaining pages
 6. **Review & polish**: accessibility, mobile, fact-check pass, publish
 
-## 8. Open questions for the user
+## 8. Decisions (answered by the user)
 
-1. **Primary audience**: Local Chief Executives and health boards? Health workers? General public? IT/EA practitioners? (This sets the depth.)
-2. **Language**: English only, Filipino, Taglish, or a toggle?
-3. **Setting**: a generic "Province of Bagong Pag-asa" plus a generic highly urbanized city, or a real province/city?
-4. **AI stance**: realistic near-term (what an LGU can do in 1 to 3 years) vs. aspirational long-term, or both side by side?
-5. **Hosting**: GitHub Pages, a shareable claude.ai page, offline zip for workshops, or all three?
-6. **Any existing materials** (DOH slides, LGU EA documents, local system names) you want reflected?
+| Topic | Decision | What it means for the build |
+|---|---|---|
+| **Audience** | LGU leaders & health boards, health workers, general public | Plain language first. No IT/EA deep-dive layer. Technical terms (FHIR, HIE) appear only in the glossary or as "what's behind this" footnotes |
+| **Language** | English only | No language toggle; keep words simple and short |
+| **Setting** | Generic fictional | A made-up province (with component cities and municipalities) plus one highly urbanized city |
+| **AI** | Near-term and future side by side | Each AI use case has a "doable in 1–3 years" column, a "future vision" column and its safeguards |
+| **Hosting** | GitHub Pages, shareable claude.ai link, offline zip | Self-contained static files with relative paths and no CDN dependency, so they work offline |
+| **Materials** | User will share DOH/LGU materials | Fold them into the research phase before writing content |
