@@ -24,14 +24,14 @@
   function byId(id) { for (var i = 0; i < D.places.length; i++) if (D.places[i].id === id) return D.places[i]; }
 
   /* ---------------- Router ---------------- */
-  var VIEWS = ["start", "map", "gap"];
+  var VIEWS = ["start", "map", "gap", "journeys", "money", "roadmap", "glossary"];
   var inited = {};
   function route() {
     var h = (location.hash || "").slice(1);
     if (VIEWS.indexOf(h) < 0) h = "start";
     VIEWS.forEach(function (v) { $("#view-" + v).hidden = v !== h; });
     $$(".nav a").forEach(function (a) { a.setAttribute("aria-current", a.getAttribute("href") === "#" + h ? "page" : "false"); });
-    if (!inited[h]) { inited[h] = true; ({ start: initStart, map: initMap, gap: initGap })[h](); }
+    if (!inited[h]) { inited[h] = true; ({ start: initStart, map: initMap, gap: initGap, journeys: initJourneys, money: initMoney, roadmap: initRoadmap, glossary: initGlossary })[h](); }
   }
   window.addEventListener("hashchange", function () { route(); window.scrollTo(0, 0); });
 
@@ -657,6 +657,170 @@
       return '<div class="eq-bar"><span>' + r[0] + '</span><div class="track"><div class="fill ' + r[2] + '" style="width:' + (r[1] / CAPMAX * 100).toFixed(1) + '%"></div></div><span class="v">' + Math.round(r[1]) + "</span></div>";
     }).join("");
     $("#eq-gap").innerHTML = 'Gap between the city and the island: <span class="n">' + Math.round(cityAI - islAI) + "</span> points with AI, " + Math.round(cityU - islU) + " the usual way.";
+  }
+
+  /* ---------------- JOURNEYS ---------------- */
+  var jr = { id: "rosa", step: 0, mode: "today" };
+  function fmt(v, unit) {
+    var n = Math.round(v * 10) / 10;
+    var str = n >= 1000 ? Math.round(n).toLocaleString("en-US") : String(n);
+    return (unit || "") + str;
+  }
+  function jrCur() { for (var i = 0; i < D.journeys.length; i++) if (D.journeys[i].id === jr.id) return D.journeys[i]; }
+  function initJourneys() {
+    $("#jr-list").innerHTML = D.journeys.map(function (j) {
+      return '<button type="button" data-jr="' + j.id + '"><span class="avatar" style="background:' + j.color + '">' + esc(j.initials) + '</span><span><strong>' + esc(j.person) + '</strong><span class="muted">' + esc(j.title) + '</span></span></button>';
+    }).join("");
+    $$("#jr-list button").forEach(function (b) { b.addEventListener("click", function () { jr.id = b.dataset.jr; jr.step = 0; renderJr(); }); });
+    $("#jr-today").addEventListener("click", function () { jr.mode = "today"; renderJr(); });
+    $("#jr-conn").addEventListener("click", function () { jr.mode = "conn"; renderJr(); });
+    $("#jr-prev").addEventListener("click", function () { if (jr.step > 0) { jr.step--; renderJr(); } });
+    $("#jr-next").addEventListener("click", function () {
+      var j = jrCur();
+      if (jr.step < j.steps.length - 1) jr.step++;
+      else if (jr.mode === "today") { jr.mode = "conn"; jr.step = 0; }
+      else jr.step = 0;
+      renderJr();
+    });
+    renderJr();
+  }
+  function renderJr() {
+    var j = jrCur(), st = j.steps[jr.step], last = jr.step === j.steps.length - 1, conn = jr.mode === "conn";
+    $$("#jr-list button").forEach(function (b) { b.setAttribute("aria-pressed", b.dataset.jr === j.id ? "true" : "false"); });
+    $("#jr-today").setAttribute("aria-pressed", conn ? "false" : "true");
+    $("#jr-conn").setAttribute("aria-pressed", conn ? "true" : "false");
+    $("#jr-head").innerHTML = '<span class="avatar" style="background:' + j.color + '">' + esc(j.initials) + '</span><div><h3>' + esc(j.person) + ': ' + esc(j.title) + '</h3><p class="muted">' + esc(j.intro) + '</p></div>';
+    $("#jr-route").innerHTML = j.steps.map(function (x, i) {
+      return '<li class="' + (i < jr.step ? "done" : i === jr.step ? "here" : "") + '"><button type="button" data-step="' + i + '" aria-label="Step ' + (i + 1) + ': ' + esc(x.where) + '"><span class="node"></span><span class="where">' + esc(x.where) + '</span></button></li>';
+    }).join("");
+    $$("#jr-route button").forEach(function (b) { b.addEventListener("click", function () { jr.step = +b.dataset.step; renderJr(); }); });
+    var card = $("#jr-card");
+    card.className = "jr-card " + (conn ? "conn" : "today");
+    card.innerHTML = '<span class="tech">Step ' + (jr.step + 1) + ' of ' + j.steps.length + ' · ' + esc(st.where) + '</span>' +
+      '<span class="mode-tag">' + (conn ? "Connected, with AI" : "The way it is today") + '</span>' +
+      '<h3>' + esc(st.title) + '</h3><p>' + esc(conn ? st.conn : st.today) + '</p>' +
+      (conn ? '<p class="ai-line"><strong>AI helper:</strong> ' + esc(st.ai) + '</p>' : '') +
+      (last ? '<p class="lesson"><strong>In short:</strong> ' + esc(j.lesson) + '</p>' : '');
+    $("#jr-prev").disabled = jr.step === 0;
+    $("#jr-next").textContent = !last ? "Next step" : (conn ? "Start again" : "Now play it connected");
+    $("#jr-metrics").innerHTML = j.metrics.map(function (m) {
+      var sum = function (arr) { var t = 0; for (var i = 0; i <= jr.step; i++) t += arr[i]; return t; };
+      var tot = 0; m.today.forEach(function (v) { tot += v; }); tot = tot || 1;
+      var a = sum(m.today), b = sum(m.conn);
+      return '<div class="metric"><span class="m-label">' + esc(m.label) + ' <span class="tech">(so far)</span></span>' +
+        '<div class="m-row' + (conn ? "" : " on") + '"><span>Today</span><div class="track"><div class="fill today" style="width:' + (a / tot * 100).toFixed(1) + '%"></div></div><b>' + fmt(a, m.unit) + '</b></div>' +
+        '<div class="m-row' + (conn ? " on" : "") + '"><span>Connected</span><div class="track"><div class="fill conn" style="width:' + (b / tot * 100).toFixed(1) + '%"></div></div><b>' + fmt(b, m.unit) + '</b></div></div>';
+    }).join("");
+  }
+
+  /* ---------------- MONEY ---------------- */
+  function initMoney() {
+    var M = D.money;
+    $("#m-sources").innerHTML = M.sources.map(function (src) {
+      return '<div class="m-item"><div class="m-top"><label for="ms-' + src.id + '"><strong>' + esc(src.name) + '</strong></label><b class="m-val" id="msv-' + src.id + '"></b></div>' +
+        '<span class="muted m-note">' + esc(src.note) + '</span><input type="range" id="ms-' + src.id + '" min="0" max="400" step="5" value="' + src.value + '"></div>';
+    }).join("");
+    $("#m-uses").innerHTML = M.uses.map(function (u) {
+      return '<div class="m-item"><div class="m-top"><label for="mu-' + u.id + '"><strong>' + esc(u.name) + '</strong></label><b class="m-val" id="muv-' + u.id + '"></b></div>' +
+        '<span class="muted m-note">' + esc(u.note) + '</span><input type="range" id="mu-' + u.id + '" min="0" max="100" step="1" value="' + u.weight + '">' +
+        '<span class="buys" id="mub-' + u.id + '"></span></div>';
+    }).join("");
+    $$("#view-money input").forEach(function (i) { i.addEventListener("input", drawMoney); });
+    drawMoney();
+  }
+  function drawMoney() {
+    var M = D.money, pooled = $("#m-pooled").checked, ai = $("#m-ai").checked;
+    var total = 0, ph = 0;
+    M.sources.forEach(function (src) { var v = +$("#ms-" + src.id).value; total += v; if (src.id === "ph") ph = v; $("#msv-" + src.id).textContent = "₱" + v + "M"; });
+    var returned = ph * (ai ? M.returnedAI : M.returnedNoAI);
+    var gross = total - returned;
+    var stuck = gross * (pooled ? M.stuckPooled : M.stuckSeparate);
+    var avail = gross - stuck;
+    var reachNoFix = (total - ph * M.returnedNoAI) * (1 - M.stuckSeparate);
+    $("#m-pot").innerHTML = '<span class="tech">Special Health Fund</span><strong class="pot-num">₱' + Math.round(avail) + 'M</strong><span>reaches care this year</span>' +
+      '<span class="muted">out of ₱' + Math.round(total) + 'M coming in</span>' +
+      ((pooled || ai) ? '<span class="pot-gain">+₱' + Math.round(avail - reachNoFix) + 'M compared with separate accounts and no AI checks</span>' : '');
+    $("#m-leaks").innerHTML = '<div class="leak' + (ai ? " small" : "") + '"><b>₱' + Math.round(returned) + 'M</b> PhilHealth claims returned for errors (paid late or not at all)</div>' +
+      '<div class="leak' + (pooled ? " small" : "") + '"><b>₱' + Math.round(stuck) + 'M</b> stuck in separate accounts, unused this year</div>';
+    var wsum = 0; M.uses.forEach(function (u) { wsum += +$("#mu-" + u.id).value; }); wsum = wsum || 1;
+    M.uses.forEach(function (u) {
+      var w = +$("#mu-" + u.id).value, amt = avail * w / wsum, n = Math.floor(amt / u.unitCost);
+      $("#muv-" + u.id).textContent = "₱" + Math.round(amt) + "M · " + Math.round(w / wsum * 100) + "%";
+      $("#mub-" + u.id).innerHTML = "≈ <b>" + n.toLocaleString("en-US") + "</b> " + esc(u.unitLabel);
+    });
+  }
+
+  /* ---------------- ROADMAP ---------------- */
+  var rm = { mode: "leap", stage: 0 };
+  function initRoadmap() {
+    var R = D.roadmap, head = '<div class="g-row g-head"><div class="g-name"></div><div class="g-lane">';
+    for (var y = 0; y < R.years; y++) head += '<span style="left:' + (y / R.years * 100) + '%;width:' + (100 / R.years) + '%">Year ' + (y + 1) + '</span>';
+    head += '</div></div>';
+    $("#gantt").innerHTML = head + R.tracks.map(function (t, i) {
+      return '<div class="g-row"><div class="g-name">' + esc(t.name) + '</div><div class="g-lane"><div class="g-bar k-' + t.kind + '" id="gb' + i + '"></div><span class="g-none" id="gn' + i + '">Not reached in 8 years</span></div></div>';
+    }).join("");
+    $("#rm-usual").addEventListener("click", function () { rm.mode = "usual"; drawRoadmap(); });
+    $("#rm-leap").addEventListener("click", function () { rm.mode = "leap"; drawRoadmap(); });
+    $("#stages").innerHTML = R.stages.map(function (s, i) {
+      return '<button type="button" data-stage="' + i + '"><span class="tech">Stage ' + (i + 1) + '</span><strong>' + esc(s.name) + '</strong></button>';
+    }).join("");
+    $$("#stages button").forEach(function (b) { b.addEventListener("click", function () { rm.stage = +b.dataset.stage; drawStage(); }); });
+    var saved = {};
+    try { saved = JSON.parse(localStorage.getItem("cph-first100") || "{}"); } catch (e) { saved = {}; }
+    $("#first100").innerHTML = R.first100.map(function (t, i) {
+      return '<li><label><input type="checkbox" id="f100-' + i + '"' + (saved[i] ? " checked" : "") + '><span>' + esc(t) + '</span></label></li>';
+    }).join("");
+    $$("#first100 input").forEach(function (cb, i) {
+      cb.addEventListener("change", function () {
+        saved[i] = cb.checked;
+        try { localStorage.setItem("cph-first100", JSON.stringify(saved)); } catch (e) { /* storage unavailable */ }
+      });
+    });
+    drawRoadmap(); drawStage();
+  }
+  function drawRoadmap() {
+    var R = D.roadmap, usual = rm.mode === "usual";
+    $("#rm-usual").setAttribute("aria-pressed", usual ? "true" : "false");
+    $("#rm-leap").setAttribute("aria-pressed", usual ? "false" : "true");
+    R.tracks.forEach(function (t, i) {
+      var r = usual ? t.usual : t.leap, bar = $("#gb" + i);
+      bar.style.left = r ? (r[0] / R.years * 100) + "%" : "100%";
+      bar.style.width = r ? ((r[1] - r[0]) / R.years * 100) + "%" : "0%";
+      $("#gn" + i).hidden = !!r;
+    });
+    $("#rm-summary").innerHTML = usual
+      ? 'The usual order: AI help reaches health workers only in <b>year 8</b>, and a learning health system is <b>not reached</b> within 8 years.'
+      : '<span class="ai-t">The leapfrog plan: AI is helping health workers in the first year,</span> and the province is learning and improving by <b>year 4</b>.';
+  }
+  function drawStage() {
+    var s = D.roadmap.stages[rm.stage];
+    $$("#stages button").forEach(function (b) { b.setAttribute("aria-pressed", +b.dataset.stage === rm.stage ? "true" : "false"); });
+    $("#stage-detail").innerHTML =
+      '<div class="sd-sign"><b>You know you are here when</b><p>' + esc(s.sign) + '</p></div>' +
+      '<div><b>Governor or Mayor</b><p>' + esc(s.leader) + '</p></div>' +
+      '<div><b>Health office</b><p>' + esc(s.office) + '</p></div>' +
+      '<div><b>Clinics and hospitals</b><p>' + esc(s.clinics) + '</p></div>' +
+      '<div class="sd-ai"><b>AI at this stage</b><p>' + esc(s.ai) + '</p></div>';
+  }
+
+  /* ---------------- GLOSSARY ---------------- */
+  var PAGE = { start: "Start", map: "Province map", gap: "Close the gap", journeys: "Journeys", money: "Money", roadmap: "Roadmap", glossary: "Glossary" };
+  function initGlossary() {
+    var input = $("#g-search");
+    input.addEventListener("input", drawGlossary);
+    drawGlossary();
+    $("#refs tbody").innerHTML = D.references.map(function (r) {
+      var cls = /^Verified/.test(r[2]) ? "ok" : /Source/.test(r[2]) ? "src" : "warn";
+      return "<tr><td>" + esc(r[0]) + "</td><td>" + esc(r[1]) + '</td><td><span class="status ' + cls + '">' + esc(r[2]) + "</span></td></tr>";
+    }).join("");
+  }
+  function drawGlossary() {
+    var q = $("#g-search").value.trim().toLowerCase();
+    var items = D.glossary.filter(function (g) { return !q || (g.term + " " + g.plain + " " + g.like).toLowerCase().indexOf(q) >= 0; });
+    $("#g-list").innerHTML = items.length ? items.map(function (g) {
+      return '<article class="g-item"><h3>' + esc(g.term) + '</h3><p>' + esc(g.plain) + '</p><p class="g-like"><b>Like:</b> ' + esc(g.like) + '</p>' +
+        (g.see !== "glossary" ? '<a href="#' + g.see + '">See it on: ' + PAGE[g.see] + '</a>' : '') + '</article>';
+    }).join("") : '<p class="muted">No words match "' + esc(q) + '". Try a shorter word.</p>';
   }
 
   route();

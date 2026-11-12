@@ -20,10 +20,13 @@
       Connected Province Health
     </a>
     <nav class="nav" aria-label="Pages">
-      <a href="#start">Start here</a>
-      <a href="#map">Explore the province</a>
-      <a href="#gap">Close the gap with AI</a>
-      <span class="soon" title="Coming next">Journeys · Money · Roadmap · Glossary (soon)</span>
+      <a href="#start">Start</a>
+      <a href="#map">Province map</a>
+      <a href="#gap">Close the gap</a>
+      <a href="#journeys">Journeys</a>
+      <a href="#money">Money</a>
+      <a href="#roadmap">Roadmap</a>
+      <a href="#glossary">Glossary</a>
     </nav>
   </div>
 </header>
@@ -261,6 +264,125 @@
     <p class="in-short"><span>In short</span>Waiting in line keeps poor towns behind. AI placed at each gap, offered as a shared service, lets every town catch up and get ahead, with people still in charge.</p>
   </section>
 </div>
+
+<!-- ================= JOURNEYS ================= -->
+<div class="view" id="view-journeys" hidden>
+  <section class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">Play a journey</p>
+      <h2>Same people, two ways</h2>
+      <p class="muted">Pick a person and walk through each step. Switch between the way it is today and the connected way with AI, and watch the cost to the family add up.</p>
+    </div>
+    <div class="jr-layout">
+      <div class="jr-list" id="jr-list" role="group" aria-label="Choose a journey"></div>
+      <div class="jr-stage">
+        <header class="jr-head" id="jr-head"></header>
+        <div class="mode-switch" role="group" aria-label="Which way">
+          <button type="button" id="jr-today" aria-pressed="true">The way it is today</button>
+          <button type="button" id="jr-conn" aria-pressed="false">Connected, with AI</button>
+        </div>
+        <ol class="route" id="jr-route"></ol>
+        <article class="jr-card" id="jr-card" aria-live="polite"></article>
+        <div class="jr-ctl">
+          <button type="button" class="btn ghost" id="jr-prev">Back</button>
+          <button type="button" class="btn" id="jr-next">Next step</button>
+        </div>
+        <div class="jr-metrics" id="jr-metrics"></div>
+        <p class="illus">Trips, days, costs and cases are illustrative examples, not measured data.</p>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ================= MONEY ================= -->
+<div class="view" id="view-money" hidden>
+  <section class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">Follow the money</p>
+      <h2>One pot of health money for the whole province</h2>
+      <p class="muted">The UHC Act asks each province-wide and city-wide health system to pool its health money in one Special Health Fund (Sec. 20). Move the sliders and switches to see where money leaks, and what it can buy once it reaches care.</p>
+    </div>
+    <div class="money-switches">
+      <label class="switch"><input type="checkbox" id="m-pooled" checked><span class="track-s"></span><span><strong>One pooled fund</strong><br><span class="muted">instead of separate accounts per town and hospital</span></span></label>
+      <label class="switch"><input type="checkbox" id="m-ai" checked><span class="track-s"></span><span><strong>AI checks PhilHealth claims</strong><br><span class="muted">before they are sent, so fewer come back</span></span></label>
+    </div>
+    <div class="money-grid">
+      <div class="m-col">
+        <h3>Where it comes from</h3>
+        <div id="m-sources" class="m-list"></div>
+      </div>
+      <div class="m-pot">
+        <div class="pot" id="m-pot"></div>
+        <div class="leaks" id="m-leaks"></div>
+      </div>
+      <div class="m-col">
+        <h3>What it is used for</h3>
+        <div id="m-uses" class="m-list"></div>
+      </div>
+    </div>
+    <p class="illus" style="margin-top:12px">Amounts in millions of pesos a year, for a made-up province of about 800,000 people. Costs per item are rough examples, not official rates. Categories are simplified from the national Special Health Fund guidelines.</p>
+    <p class="in-short"><span>In short</span>Pooling the money and catching errors before claims are sent means more pesos reach care. The shared road and AI services are paid for once, as shared services for every town.</p>
+  </section>
+</div>
+
+<!-- ================= ROADMAP ================= -->
+<div class="view" id="view-roadmap" hidden>
+  <section class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">The roadmap</p>
+      <h2>Build the road and use AI at the same time</h2>
+      <p class="muted">Switch between the usual order and the leapfrog plan. Purple bars are AI helpers.</p>
+    </div>
+    <div class="mode-switch" role="group" aria-label="Which plan">
+      <button type="button" id="rm-usual" aria-pressed="false">The usual order</button>
+      <button type="button" id="rm-leap" aria-pressed="true">The leapfrog plan</button>
+    </div>
+    <div class="gantt-wrap"><div class="gantt" id="gantt"></div></div>
+    <p class="summary-line" id="rm-summary" aria-live="polite"></p>
+    <p class="illus">Timelines are illustrative.</p>
+  </section>
+
+  <section class="wrap" aria-labelledby="h-stages">
+    <div class="section-head">
+      <p class="eyebrow">Where are we now?</p>
+      <h2 id="h-stages">Four stages of a connected province</h2>
+      <p class="muted">Pick the stage that sounds like your province. These stages are a simplified guide made for this explainer, not the official DOH maturity levels.</p>
+    </div>
+    <div class="stages" id="stages" role="group" aria-label="Stages"></div>
+    <div class="stage-detail" id="stage-detail" aria-live="polite"></div>
+  </section>
+
+  <section class="wrap" aria-labelledby="h-100">
+    <div class="section-head">
+      <p class="eyebrow">For the Governor or Mayor</p>
+      <h2 id="h-100">The first 100 days</h2>
+      <p class="muted">Tick them off as you go. Your ticks are saved in this browser only.</p>
+    </div>
+    <ul class="checklist" id="first100"></ul>
+    <p class="in-short"><span>In short</span>Don't wait for perfect foundations before using AI. Build the shared road, the agreements and the fund while AI closes gaps from the first year.</p>
+  </section>
+</div>
+
+<!-- ================= GLOSSARY ================= -->
+<div class="view" id="view-glossary" hidden>
+  <section class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">Glossary</p>
+      <h2>Words you'll hear, in plain language</h2>
+    </div>
+    <label for="g-search" class="tech">Search</label>
+    <input type="search" id="g-search" class="g-search" placeholder="Try: referral, fund, FHIR, AI">
+    <div class="g-list" id="g-list"></div>
+  </section>
+  <section class="wrap" aria-labelledby="h-refs">
+    <div class="section-head">
+      <p class="eyebrow">Sources</p>
+      <h2 id="h-refs">Laws and documents this is based on</h2>
+      <p class="muted">Checked in November 2026. Items marked "partly verified" or "draft" should be confirmed before they are quoted.</p>
+    </div>
+    <div class="ref-table-wrap"><table class="ref-table" id="refs"><thead><tr><th>Document</th><th>Year</th><th>Status</th></tr></thead><tbody></tbody></table></div>
+  </section>
+</div>
 </main>
 
 <footer>
@@ -270,6 +392,7 @@
 </footer>
 
 <script src="assets/js/content.js"></script>
+<script src="assets/js/content2.js"></script>
 <script src="assets/js/app.js"></script>
 </body>
 </html>

@@ -1,6 +1,6 @@
 # Plan: Connected Province/City-Wide Health System — Interactive Enterprise Architecture
 
-Status: **Phase 4 prototype built** (Start, Province Map, Close the Gap). Research results are in `docs/references.md`.
+Status: **Phase 5 build-out done**: all eight pages exist (Start, Province Map, Close the Gap, Journeys, Money, Roadmap, Glossary; Connected vs Integrated is part of Start). Next: review and polish. Research results are in `docs/references.md`.
 
 ---
 

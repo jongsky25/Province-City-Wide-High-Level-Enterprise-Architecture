@@ -22,7 +22,7 @@ def bundle():
     html = read("index.html")
     css = read("assets/css/styles.css")
     html = html.replace('<link rel="stylesheet" href="assets/css/styles.css">', "<style>\n" + css + "\n</style>")
-    for js in ("assets/js/content.js", "assets/js/app.js"):
+    for js in ("assets/js/content.js", "assets/js/content2.js", "assets/js/app.js"):
         tag = '<script src="%s"></script>' % js
         assert tag in html, tag
         html = html.replace(tag, "<script>\n" + read(js).replace("</script", "<\\/script") + "\n</script>")
