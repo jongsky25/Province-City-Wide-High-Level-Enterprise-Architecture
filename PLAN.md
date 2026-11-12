@@ -84,7 +84,7 @@ Static HTML + CSS + vanilla JavaScript. No build step. All content lives in JSON
 
 Cross-cutting:
 - Mobile-friendly, works offline once loaded, accessible (keyboard, contrast)
-- Optional **English / Filipino** toggle
+- English only, written for non-technical readers
 - Clear labels separating **"what the law says"** from **"our recommended design"**
 - Deployable on GitHub Pages; can also be published as a shareable page
 
@@ -105,7 +105,7 @@ Cross-cutting:
 
 ## 7. Phases
 
-1. **Plan** (this document) → agree with the user on the open questions
+1. **Plan** (this document) → decisions recorded in section 8
 2. **Research**: confirm legal references and section numbers; build `references.json`
 3. **Content model**: write the components, links and journey JSON in plain language
 4. **Prototype**: Start page + Architecture Map + one journey (vertical slice) for review
