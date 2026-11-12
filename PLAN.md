@@ -27,6 +27,48 @@ What makes "connected" work is a thin **shared layer**. The DOH HSEA material na
 
 Note: the UHC Act uses the word *integration* (integrating local health systems into P/CWHS). The pages will explain that the Act's **management and financial integration** (one network, one Special Health Fund, one health board) is best served by **technical connection** rather than one monolithic IT system. This framing is our interpretation and will be labelled that way.
 
+## 2A. Design principle: people first, architecture second
+
+The DOH HSEA deck is accurate but written for architects. Decision makers and ordinary readers can't relate to boxes labelled "Interoperability Layer" or "Entity Mapping". **These pages translate the architecture into everyday life.** The HSEA structure stays underneath as the backbone, but the reader meets **people, places and problems** first.
+
+### Rules every page must follow
+
+1. **Start with a person, not a box.** Every concept opens with someone it affects: *Aling Rosa* (a pregnant mother in a far barangay), *Mang Ben* (a farmer with hypertension), *Nurse Joy* (at the RHU), *Doc Mike* (at the provincial hospital), *Gov. Santos / Mayor Reyes* (decision makers), *Ate Lorna* (a Barangay Health Worker).
+2. **Show the problem before the solution.** "Rosa's records are on paper at the BHS, so the hospital starts from zero" comes before "shared health record".
+3. **Everyday comparisons for every technical piece** (see the translation table below).
+4. **No jargon on the main screen.** Acronyms and technical terms appear only behind a small *"What DOH calls this"* label or in the glossary. Aim for short sentences that a Grade 8 reader understands.
+5. **Answer "So what?" for each reader**:
+   - *For families*: what changes when I get sick?
+   - *For health workers*: what gets easier at work?
+   - *For the Governor/Mayor and Health Board*: what decision do I make, what does it cost, what do we get, and how do I know it works?
+6. **Pictures over diagrams.** The main view is an **illustrated province** (houses, barangay health station, RHU, hospital, capitol, PhilHealth office, pharmacy, phones), not a layered box chart. The HSEA box view is an optional **"Show the technical view"** toggle for those who want it.
+7. **Make it playable.** Learn by doing: follow a patient, press play, flip a switch, cause an outage, close a gap.
+8. **One idea per screen.** Short text, one big visual, one action.
+
+### Translation table: DOH term → what people see
+
+| DOH / technical term | People version | Everyday comparison |
+|---|---|---|
+| Health Sector Enterprise Architecture | "How our whole health system fits together" | The blueprint of a house |
+| Interoperability layer | "The common road and common language all clinics use to share information" | National highway + traffic rules |
+| Client registry (PhilSys link) | "One health ID, so the system knows Rosa is Rosa everywhere" | Your one passport |
+| Facility / health worker registry | "The official list of every clinic and every health worker" | A phone directory you can trust |
+| Terminology services (ICD, SNOMED) | "A shared dictionary so 'high blood' means the same thing everywhere" | A dictionary |
+| Product catalogue | "One list of medicines and supplies with the same names everywhere" | A grocery price tag code |
+| Shared Health Record | "Your health story that follows you from the BHS to the hospital" | Your school report card that moves with you when you transfer |
+| Point-of-service systems (EMR, HIS, LMIS) | "The apps used at the clinic counter, pharmacy and lab" | Cash registers in different stores |
+| Health Care Provider Network | "A team of clinics and hospitals working as one" | A basketball team: each player has a position, all play to win |
+| Primary care / gatekeeping | "Your first stop: your assigned health center knows you and guides you" | Your barangay's family doctor |
+| Special Health Fund | "One pot of health money for the province, used by plan" | The family budget envelope |
+| NHDR / dashboards | "The province's health scoreboard" | A basketball scoreboard |
+| 12 HSEA capabilities | Ask them as questions: "Is there a doctor near me?", "Will there be medicine?", "Who pays?", "Are we ready for the next outbreak?" | — |
+| Connected, not integrated | "Every town keeps its own house, but all houses are on the same road" | Jeepneys from different owners on the same routes |
+| AI | "A tireless helper that reads, reminds, warns and translates, while people still decide" | A smart assistant beside every health worker |
+
+### Testing understanding
+
+Before calling a page done, check it against a simple test: can a barangay captain explain the page back in two sentences after 2 minutes? Each page ends with a one-line **"In short:"** summary.
+
 ## 3. Alignment with the DOH Health Sector Enterprise Architecture (user-provided material)
 
 Source: *"Understanding the Health Sector Enterprise Architecture"*, DOH Knowledge Management and Information Technology Service (KMITS) presentation, shared by the user.
@@ -58,7 +100,7 @@ Source: *"Understanding the Health Sector Enterprise Architecture"*, DOH Knowled
 
 The **Province/City-wide Health System EA** is the **local version** of the HSEA. It sits mostly at the **portfolio/project level** for one LGU and plugs into the national interoperability layer and registries. Changes to the plan:
 
-- The **architecture map** (page 3) uses the **HSEA's four tiers and 12 capabilities** as its backbone, so LGU leaders see the same structure DOH uses. Each element gets a plain-language explanation of what it means *locally*.
+- The **architecture map** (page 3) uses the **HSEA's four tiers and 12 capabilities** as its *hidden backbone*. Readers see an **illustrated province**, and the HSEA box view appears only through a "Show the technical view" toggle (see section 2A). Each element is explained in terms of what it means *locally* and *for a person*.
 - A **"Zoom" control** reuses the deck's map comparison. It moves from the national HSEA (2 km) → province/city portfolio (100 m) → one local project such as the referral flow (5 m) → one RHU's EMR (street level).
 - A **"Who invests in what" toggle** shows the national-vs-local split: DOH builds the interoperability layer and national registries; the province/city runs local registries, its own systems and governance; facilities run point-of-service tools.
 - The **Aklan HIE pilot** is cited in the references as a real-world example. The scenarios themselves stay in the **fictional province and city**.
@@ -150,7 +192,7 @@ Static HTML + CSS + vanilla JavaScript. No build step, no external dependencies 
 |---|---|---|
 | 1 | **Start here: What is this?** | Plain-language intro; flip cards for **"It IS / It is NOT"** |
 | 2 | **Connected vs Integrated** | Toggle animation: "spaghetti" → "one big system" → "connected via shared layer"; simulate an outage to show resilience |
-| 3 | **The Architecture Map** | HSEA-based clickable diagram with the **Zoom** control (national → province → project → facility); **"Who invests in what"** toggle; lens filters (*services, money, data, people, AI*) |
+| 3 | **The Architecture Map** | An **illustrated province** (homes, BHS, RHU, hospitals, capitol, pharmacy, PhilHealth) you click to explore; **Zoom** control (country → province → town → clinic); **"Who invests in what"** toggle; lens filters (*care, money, information, people, AI*); optional **"Show the technical view"** that reveals the DOH HSEA boxes |
 | 4 | **Close the Gap with AI** | Section 4.4: LGU profiles, gap radar, two-path race, equalizer slider |
 | 5 | **Play a Patient Journey** | Step-through stories with animated flows of **care, data and money**, plus *"without AI / with AI"* toggles. Scenarios: pregnant mother, hypertension/diabetes, emergency referral, TB, dengue outbreak |
 | 6 | **Follow the Money** | Special Health Fund: sources → pool → uses; sliders (simplified, illustrative) |
@@ -198,3 +240,4 @@ Cross-cutting:
 | **AI** | Near-term and future side by side; **AI as gap equalizer that helps LGUs leapfrog** | Every AI case shows "1–3 years" vs "future vision", the gap it closes, and its safeguards; a dedicated "Close the Gap" page |
 | **Hosting** | GitHub Pages, shareable claude.ai link, offline zip | Self-contained static files, relative paths, no CDN dependency |
 | **Materials** | DOH HSEA deck (KMITS) provided | The map follows the HSEA structure and the OpenHIE national/local split (section 3) |
+| **Tone** | The deck is too technical for decision makers | People-first design (section 2A): personas, everyday comparisons, illustrated views; technical view is optional |
