@@ -24,16 +24,63 @@
   function byId(id) { for (var i = 0; i < D.places.length; i++) if (D.places[i].id === id) return D.places[i]; }
 
   /* ---------------- Router ---------------- */
-  var VIEWS = ["start", "map", "gap", "journeys", "money", "roadmap", "glossary"];
-  var inited = {};
+  var VIEWS = ["start", "map", "gap", "journeys", "money", "roadmap", "todo", "glossary"];
+  var PAGE = { start: "Start", map: "Province map", gap: "Close the gap", journeys: "Journeys", money: "Money", roadmap: "Roadmap", todo: "Your part", glossary: "Glossary" };
+  var FUTURE = '<span class="tag-future">Future</span>';
+  var inited = {}, current = null;
+  function store(key, val) {
+    try {
+      if (val === undefined) return JSON.parse(localStorage.getItem(key) || "null");
+      localStorage.setItem(key, JSON.stringify(val));
+    } catch (e) { /* storage unavailable */ }
+    return null;
+  }
   function route() {
-    var h = (location.hash || "").slice(1);
+    var parts = (location.hash || "").slice(1).split("/"), h = parts[0], arg = parts[1];
     if (VIEWS.indexOf(h) < 0) h = "start";
     VIEWS.forEach(function (v) { $("#view-" + v).hidden = v !== h; });
     $$(".nav a").forEach(function (a) { a.setAttribute("aria-current", a.getAttribute("href") === "#" + h ? "page" : "false"); });
-    if (!inited[h]) { inited[h] = true; ({ start: initStart, map: initMap, gap: initGap, journeys: initJourneys, money: initMoney, roadmap: initRoadmap, glossary: initGlossary })[h](); }
+    if (h === "todo" && arg) setRole(arg, true);
+    if (!inited[h]) { inited[h] = true; ({ start: initStart, map: initMap, gap: initGap, journeys: initJourneys, money: initMoney, roadmap: initRoadmap, todo: initTodo, glossary: initGlossary })[h](); }
+    var changed = current !== h; current = h;
+    var nx = VIEWS[VIEWS.indexOf(h) + 1];
+    $("#next-page").innerHTML = (nx && !tour.on) ? '<a class="btn ghost" href="#' + nx + '">Next: ' + PAGE[nx] + ' →</a>' : '';
+    return changed;
   }
-  window.addEventListener("hashchange", function () { route(); window.scrollTo(0, 0); });
+  window.addEventListener("hashchange", function () { if (route() && !tour.on) window.scrollTo(0, 0); });
+
+  /* ---------------- GUIDED TOUR ---------------- */
+  var tour = { on: false, i: 0 };
+  function tourGo(i) {
+    var T = D.tour;
+    if (i < 0) i = 0;
+    if (i >= T.length) { tourEnd(); return; }
+    tour.on = true; tour.i = i;
+    var st = T[i];
+    document.body.classList.add("touring");
+    $("#tour").hidden = false;
+    $("#tour-count").textContent = "Tour · step " + (i + 1) + " of " + T.length;
+    $("#tour-title").textContent = st.title;
+    $("#tour-text").textContent = st.text;
+    $("#tour-prev").disabled = i === 0;
+    $("#tour-next").textContent = i === T.length - 1 ? "Finish" : "Next";
+    if (current !== st.view) { location.hash = "#" + st.view; route(); } else { route(); }
+    var el = $(st.sel);
+    if (el) {
+      var sec = el.closest("section") || el;
+      var top = sec.getBoundingClientRect().top + window.pageYOffset - (window.innerWidth > 760 ? 70 : 8);
+      window.scrollTo({ top: Math.max(0, top), behavior: reduceMotion ? "auto" : "smooth" });
+    }
+  }
+  function tourEnd() {
+    tour.on = false;
+    document.body.classList.remove("touring");
+    $("#tour").hidden = true;
+    route();
+  }
+  $("#tour-prev").addEventListener("click", function () { tourGo(tour.i - 1); });
+  $("#tour-next").addEventListener("click", function () { tourGo(tour.i + 1); });
+  $("#tour-end").addEventListener("click", tourEnd);
 
   /* ---------------- START ---------------- */
   function initStart() {
@@ -52,6 +99,9 @@
     $$("#isnot .flip").forEach(function (b) {
       b.addEventListener("click", function () { b.setAttribute("aria-pressed", b.getAttribute("aria-pressed") === "true" ? "false" : "true"); });
     });
+
+    $("#iam").innerHTML = D.roles.map(function (r) { return '<a class="chip" href="#todo/' + r.id + '">' + esc(r.short) + '</a>'; }).join("");
+    $("#tour-start").addEventListener("click", function () { tourGo(0); });
 
     initSim();
   }
@@ -450,7 +500,7 @@
       '<div class="block"><p>' + esc(p.what) + '</p></div>' +
       '<div class="block today"><b>Today</b><p>' + esc(p.today) + '</p></div>' +
       '<div class="block conn"><b>When connected</b><p>' + esc(p.connected) + '</p></div>' +
-      '<div class="ai-box"><b>AI helper</b><div class="cols"><div><span>Doable in 1–3 years</span>' + esc(p.aiNow) + '</div><div><span>Future vision</span>' + esc(p.aiFuture) + '</div></div>' +
+      '<div class="ai-box"><b>AI helper ' + FUTURE + '</b><div class="cols"><div><span>Could come first</span>' + esc(p.aiNow) + '</div><div><span>Longer-term vision</span>' + esc(p.aiFuture) + '</div></div>' +
       '<p class="guard"><strong>Safeguard:</strong> ' + esc(p.guard) + '</p></div>' +
       '<div class="meta"><span class="pill ' + p.invest + '">' + esc(INVEST[p.invest]) + '</span><span class="tech"><b>What DOH calls this:</b> ' + esc(p.doh) + '</span></div>';
   }
@@ -467,7 +517,7 @@
     $("#rosa-step").textContent = "Step " + (i + 1) + " of " + steps.length;
     $("#rosa-title").textContent = s.title;
     $("#rosa-text").textContent = s.text;
-    $("#rosa-ai").textContent = "AI helper: " + s.ai;
+    $("#rosa-ai").innerHTML = FUTURE + "AI helper: " + esc(s.ai);
     $("#rosa-prev").disabled = i === 0;
     $("#rosa-next").textContent = i === steps.length - 1 ? "Finish" : "Next";
     setLens(s.lens);
@@ -485,6 +535,14 @@
     }
     map.rosaPos = to;
     requestAnimationFrame(step);
+    scrollMapTo(to[0]);
+  }
+  /* On phones the map is wider than the screen: bring a place into view */
+  function scrollMapTo(x) {
+    var sc = $("#map-scroll");
+    if (!sc || sc.scrollWidth <= sc.clientWidth + 1) return;
+    var frac = (x - map.vb[0]) / map.vb[2];
+    sc.scrollTo({ left: Math.max(0, frac * sc.scrollWidth - sc.clientWidth / 2), behavior: reduceMotion ? "auto" : "smooth" });
   }
   function rosaStop() {
     $("#rosa-card").hidden = true;
@@ -530,7 +588,8 @@
   function aiVal(p, i, t, share) {
     var P = D.profiles[p], s = (share === undefined ? gap.share : share);
     var scale = P.capacity + s * (1 - P.capacity), head = (CAPMAX - P.base[i]) / 100;
-    return Math.min(CAPMAX, P.base[i] + 6 * P.capacity * t + CAPS[i].boost * scale * head * Math.max(0, t - 0.5));
+    /* never drawn above the target line: the claim is "closes the gap", not "beats the target" */
+    return Math.min(goal(t), P.base[i] + 6 * P.capacity * t + CAPS[i].boost * scale * head * Math.max(0, t - 0.5));
   }
   function avg(fn) { var s = 0; for (var i = 0; i < CAPS.length; i++) s += fn(i); return s / CAPS.length; }
   function goal(t) { return 100 + 3 * t; }
@@ -561,10 +620,10 @@
     eq.addEventListener("input", function () { gap.share = parseFloat(eq.value); drawGap(); drawEq(); });
 
     $("#gap-cards").innerHTML = D.gaps.map(function (g) {
-      return '<details class="gap-card"><summary><span class="tech">Question ' + (g.cap + 1) + ': ' + esc(CAPS[g.cap].q) + '</span><h3>' + esc(g.title) + '</h3><span class="who">' + esc(g.who) + '</span><span class="open">See the AI fix</span></summary>' +
+      return '<details class="gap-card"><summary><span class="tech">Question ' + (g.cap + 1) + ': ' + esc(CAPS[g.cap].q) + '</span><h3>' + esc(g.title) + '</h3><span class="who">' + esc(g.who) + '</span><span class="open">See the proposed AI fix</span></summary>' +
         '<div class="body"><div class="usual-l"><b>The usual fix</b>' + esc(g.usual) + '</div>' +
-        '<div class="ai-l"><div><b>AI fix, doable in 1–3 years</b>' + esc(g.aiNow) + '</div><div><b>Future vision</b>' + esc(g.aiFuture) + '</div></div>' +
-        '<div class="ahead"><b>How it puts us ahead</b>' + esc(g.ahead) + '</div>' +
+        '<div class="ai-l"><div><b>' + FUTURE + 'AI fix that could come first</b>' + esc(g.aiNow) + '</div><div><b>' + FUTURE + 'Longer-term vision</b>' + esc(g.aiFuture) + '</div></div>' +
+        '<div class="ahead"><b>What it could change</b>' + esc(g.ahead) + '</div>' +
         '<div class="needs"><b>Needs from the shared road</b>' + esc(g.needs) + '</div>' +
         '<div class="guard-l"><b>Safeguard</b>' + esc(g.guard) + '</div></div></details>';
     }).join("");
@@ -620,7 +679,7 @@
     var vu = avg(function (i) { return trad(p, i, t); }), va = avg(function (i) { return aiVal(p, i, t); }), vg = goal(t);
     var ends = [
       { y: sy(goal(6)), txt: "Where we", txt2: "should be", fill: "var(--ink)" },
-      { y: sy(avg(function (i) { return aiVal(p, i, 6); })), txt: "With AI", fill: "var(--ai)" },
+      { y: sy(avg(function (i) { return aiVal(p, i, 6); })), txt: "With AI", txt2: "(future)", fill: "var(--ai)" },
       { y: sy(avg(function (i) { return trad(p, i, 6); })), txt: "The usual", txt2: "way", fill: "var(--muted)" }
     ].sort(function (a, b) { return a.y - b.y; });
     for (var e = 1; e < ends.length; e++) { var need = ends[e - 1].txt2 ? 34 : 22; if (ends[e].y - ends[e - 1].y < need) ends[e].y = ends[e - 1].y + need; }
@@ -635,7 +694,7 @@
     var label = t < 0.05 ? "Today" : "Year " + (Math.round(t * 10) / 10).toFixed(1).replace(".0", "");
     $("#gap-year-out").textContent = label;
     var s = esc(P.name) + ", " + label.toLowerCase() + ": the usual way reaches <b>" + Math.round(vu) + "</b> of the <b>" + Math.round(vg) + "</b> needed. ";
-    s += va >= vg ? '<span class="ai-t">With AI: ' + Math.round(va) + ", ahead of the goal.</span>" : '<span class="ai-t">With AI: ' + Math.round(va) + ".</span>";
+    s += va >= vg - 0.5 ? '<span class="ai-t">With AI it could reach ' + Math.round(va) + ", level with where it should be.</span>" : '<span class="ai-t">With AI it could reach ' + Math.round(va) + ".</span>";
     if (t < 0.05) s = esc(P.name) + " today: readiness " + Math.round(vu) + " out of 100. Press Play to see the next six years.";
     $("#gap-summary").innerHTML = s;
 
@@ -699,7 +758,7 @@
     card.innerHTML = '<span class="tech">Step ' + (jr.step + 1) + ' of ' + j.steps.length + ' · ' + esc(st.where) + '</span>' +
       '<span class="mode-tag">' + (conn ? "Connected, with AI" : "The way it is today") + '</span>' +
       '<h3>' + esc(st.title) + '</h3><p>' + esc(conn ? st.conn : st.today) + '</p>' +
-      (conn ? '<p class="ai-line"><strong>AI helper:</strong> ' + esc(st.ai) + '</p>' : '') +
+      (conn ? '<p class="ai-line">' + FUTURE + '<strong>AI helper:</strong> ' + esc(st.ai) + '</p>' : '') +
       (last ? '<p class="lesson"><strong>In short:</strong> ' + esc(j.lesson) + '</p>' : '');
     $("#jr-prev").disabled = jr.step === 0;
     $("#jr-next").textContent = !last ? "Next step" : (conn ? "Start again" : "Now play it connected");
@@ -751,13 +810,13 @@
   }
 
   /* ---------------- ROADMAP ---------------- */
-  var rm = { mode: "leap", stage: 0 };
+  var rm = { mode: "leap", stage: 0, track: 0 };
   function initRoadmap() {
     var R = D.roadmap, head = '<div class="g-row g-head"><div class="g-name"></div><div class="g-lane">';
     for (var y = 0; y < R.years; y++) head += '<span style="left:' + (y / R.years * 100) + '%;width:' + (100 / R.years) + '%">Year ' + (y + 1) + '</span>';
     head += '</div></div>';
     $("#gantt").innerHTML = head + R.tracks.map(function (t, i) {
-      return '<div class="g-row"><div class="g-name">' + esc(t.name) + '</div><div class="g-lane"><div class="g-bar k-' + t.kind + '" id="gb' + i + '"></div><span class="g-none" id="gn' + i + '">Not reached in 8 years</span></div></div>';
+      return '<div class="g-row"><button type="button" class="g-name" data-track="' + i + '" aria-pressed="false">' + esc(t.name) + (t.kind === "ai" ? " " + FUTURE : "") + '</button><div class="g-lane" data-track="' + i + '"><div class="g-bar k-' + t.kind + '" id="gb' + i + '"></div><span class="g-none" id="gn' + i + '">Not reached in 8 years</span></div></div>';
     }).join("");
     $("#rm-usual").addEventListener("click", function () { rm.mode = "usual"; drawRoadmap(); });
     $("#rm-leap").addEventListener("click", function () { rm.mode = "leap"; drawRoadmap(); });
@@ -765,17 +824,8 @@
       return '<button type="button" data-stage="' + i + '"><span class="tech">Stage ' + (i + 1) + '</span><strong>' + esc(s.name) + '</strong></button>';
     }).join("");
     $$("#stages button").forEach(function (b) { b.addEventListener("click", function () { rm.stage = +b.dataset.stage; drawStage(); }); });
-    var saved = {};
-    try { saved = JSON.parse(localStorage.getItem("cph-first100") || "{}"); } catch (e) { saved = {}; }
-    $("#first100").innerHTML = R.first100.map(function (t, i) {
-      return '<li><label><input type="checkbox" id="f100-' + i + '"' + (saved[i] ? " checked" : "") + '><span>' + esc(t) + '</span></label></li>';
-    }).join("");
-    $$("#first100 input").forEach(function (cb, i) {
-      cb.addEventListener("change", function () {
-        saved[i] = cb.checked;
-        try { localStorage.setItem("cph-first100", JSON.stringify(saved)); } catch (e) { /* storage unavailable */ }
-      });
-    });
+    $$("#gantt [data-track]").forEach(function (b) { b.addEventListener("click", function () { rm.track = +b.dataset.track; drawTrack(); }); });
+    drawTrack();
     drawRoadmap(); drawStage();
   }
   function drawRoadmap() {
@@ -790,7 +840,17 @@
     });
     $("#rm-summary").innerHTML = usual
       ? 'The usual order: AI help reaches health workers only in <b>year 8</b>, and a learning health system is <b>not reached</b> within 8 years.'
-      : '<span class="ai-t">The leapfrog plan: AI is helping health workers in the first year,</span> and the province is learning and improving by <b>year 4</b>.';
+      : '<span class="ai-t">The leapfrog plan: AI could be helping health workers in the first year,</span> and the province could be learning and improving by <b>year 4</b>.';
+  }
+  function drawTrack() {
+    var R = D.roadmap, t = R.tracks[rm.track], d = D.roadmapDetails[rm.track];
+    $$("#gantt button.g-name").forEach(function (b) { b.setAttribute("aria-pressed", +b.dataset.track === rm.track ? "true" : "false"); });
+    $("#rm-detail").innerHTML =
+      '<div class="rd-head"><b>The line you picked</b><h3>' + esc(t.name) + (t.kind === "ai" ? " " + FUTURE : "") + '</h3></div>' +
+      '<div><b>The decision it needs</b><p>' + esc(d.decision) + '</p></div>' +
+      '<div><b>Who decides</b><p>' + esc(d.owner) + '</p></div>' +
+      '<div><b>What must be in place first</b><p>' + esc(d.needs) + '</p></div>' +
+      '<div><b>Basis</b><p>' + esc(d.basis) + '</p></div>';
   }
   function drawStage() {
     var s = D.roadmap.stages[rm.stage];
@@ -800,11 +860,69 @@
       '<div><b>Governor or Mayor</b><p>' + esc(s.leader) + '</p></div>' +
       '<div><b>Health office</b><p>' + esc(s.office) + '</p></div>' +
       '<div><b>Clinics and hospitals</b><p>' + esc(s.clinics) + '</p></div>' +
-      '<div class="sd-ai"><b>AI at this stage</b><p>' + esc(s.ai) + '</p></div>';
+      '<div class="sd-ai"><b>AI at this stage ' + FUTURE + '</b><p>' + esc(s.ai) + '</p></div>';
+  }
+
+  /* ---------------- YOUR PART ---------------- */
+  var todo = { role: (store("cph-role") || "leader"), ticks: (store("cph-todo") || {}) };
+  function roleById(id) { for (var i = 0; i < D.roles.length; i++) if (D.roles[i].id === id) return D.roles[i]; }
+  function setRole(id, quiet) {
+    if (!roleById(id)) return;
+    todo.role = id; store("cph-role", id);
+    if (inited.todo) drawTodo();
+  }
+  function initTodo() {
+    if (!roleById(todo.role)) todo.role = "leader";
+    $("#roles").innerHTML = D.roles.map(function (r) {
+      return '<button type="button" data-role="' + r.id + '"><span class="avatar" style="background:' + r.color + '">' + esc(r.initials) + '</span><strong>' + esc(r.name) + '</strong></button>';
+    }).join("");
+    $$("#roles button").forEach(function (b) { b.addEventListener("click", function () { setRole(b.dataset.role); }); });
+    $("#print-role").addEventListener("click", function () { printSheet([roleById(todo.role)]); });
+    $("#print-all").addEventListener("click", function () { printSheet(D.roles); });
+    drawTodo();
+  }
+  function drawTodo() {
+    var r = roleById(todo.role);
+    $$("#roles button").forEach(function (b) { b.setAttribute("aria-pressed", b.dataset.role === r.id ? "true" : "false"); });
+    $("#role-head").innerHTML = '<h3>' + esc(r.name) + '</h3><p>' + esc(r.line) + '</p>';
+    var html = "", lastWhen = null;
+    r.actions.forEach(function (a, i) {
+      if (a.when !== lastWhen) { html += (lastWhen === null ? "" : "</ol>") + '<h3 class="when-h">' + D.whenLabels[a.when] + '</h3><ol class="todo">'; lastWhen = a.when; }
+      var key = r.id + "-" + i;
+      html += '<li class="todo-item"><label><input type="checkbox" data-key="' + key + '"' + (todo.ticks[key] ? " checked" : "") + '><span class="todo-do">' + esc(a.do) + '</span></label>' +
+        '<dl><div><dt>With whom</dt><dd>' + esc(a.withWho) + '</dd></div><div><dt>What it costs</dt><dd>' + esc(a.cost) + '</dd></div><div class="done"><dt>Done when</dt><dd>' + esc(a.done) + '</dd></div></dl></li>';
+    });
+    $("#todo-list").innerHTML = html + "</ol>";
+    $$("#todo-list input").forEach(function (cb) {
+      cb.addEventListener("change", function () { todo.ticks[cb.dataset.key] = cb.checked; store("cph-todo", todo.ticks); drawProgress(); });
+    });
+    drawProgress();
+  }
+  function drawProgress() {
+    var r = roleById(todo.role), n = 0;
+    r.actions.forEach(function (a, i) { if (todo.ticks[r.id + "-" + i]) n++; });
+    $("#todo-progress").innerHTML = "<b>" + n + " of " + r.actions.length + "</b> done";
+  }
+  function printSheet(roles) {
+    var O = D.onePage;
+    var html = '<section class="ps-page"><h1>' + esc(O.title) + '</h1>' +
+      '<p class="ps-sub">' + esc(D.province) + ' and ' + esc(D.city) + ' are fictional examples. This is not an official DOH publication.</p><dl class="ps-points">' +
+      O.points.map(function (pt) { return '<div><dt>' + esc(pt[0]) + '</dt><dd>' + esc(pt[1]) + '</dd></div>'; }).join("") + '</dl>' +
+      '<h2>Who does what</h2><table class="ps-table"><tbody>' +
+      D.roles.map(function (r) { return '<tr><th>' + esc(r.name) + '</th><td>' + esc(r.line) + '</td></tr>'; }).join("") + '</tbody></table></section>';
+    roles.forEach(function (r) {
+      html += '<section class="ps-page"><h1>' + esc(r.name) + ': what I need to do</h1><p class="ps-sub">' + esc(r.line) + '</p>' +
+        '<table class="ps-table ps-actions"><thead><tr><th></th><th>What to do</th><th>With whom</th><th>By when</th><th>What it costs</th><th>Done when</th></tr></thead><tbody>' +
+        r.actions.map(function (a) {
+          return '<tr><td><span class="ps-box"></span></td><td><b>' + esc(a.do) + '</b></td><td>' + esc(a.withWho) + '</td><td>' + D.whenLabels[a.when] + '</td><td>' + esc(a.cost) + '</td><td>' + esc(a.done) + '</td></tr>';
+        }).join("") + '</tbody></table>' +
+        '<p class="ps-sub">Suggested first steps for the example province. Not official DOH guidance.</p></section>';
+    });
+    $("#print-sheet").innerHTML = html;
+    window.print();
   }
 
   /* ---------------- GLOSSARY ---------------- */
-  var PAGE = { start: "Start", map: "Province map", gap: "Close the gap", journeys: "Journeys", money: "Money", roadmap: "Roadmap", glossary: "Glossary" };
   function initGlossary() {
     var input = $("#g-search");
     input.addEventListener("input", drawGlossary);

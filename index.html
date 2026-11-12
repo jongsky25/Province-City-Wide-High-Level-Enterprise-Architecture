@@ -26,6 +26,7 @@
       <a href="#journeys">Journeys</a>
       <a href="#money">Money</a>
       <a href="#roadmap">Roadmap</a>
+      <a href="#todo">Your part</a>
       <a href="#glossary">Glossary</a>
     </nav>
   </div>
@@ -41,8 +42,12 @@
         <h1>Every clinic keeps its own house. <em>All of them share one road.</em></h1>
         <p class="lede">This is a plain guide to how a province or city health system should work under the Universal Health Care Act. Families, health workers, mayors and governors can see how the pieces connect, and how AI helps the towns that are behind get ahead.</p>
         <div class="actions">
-          <a class="btn" href="#map">Explore the province</a>
-          <a class="btn ghost" href="#gap">See how AI closes the gaps</a>
+          <button type="button" class="btn" id="tour-start">Take the 5-minute tour</button>
+          <a class="btn ghost" href="#map">Explore the province</a>
+        </div>
+        <div class="iam">
+          <p class="iam-label">Or go straight to what you need to do. I am a:</p>
+          <div class="iam-chips" id="iam"></div>
         </div>
       </div>
       <div class="hero-art" aria-hidden="true">
@@ -108,7 +113,8 @@
     <div class="section-head">
       <p class="eyebrow">Where AI fits</p>
       <h2 id="h-ai">Don't wait in line. Close the gap now.</h2>
-      <p class="muted">The usual plan makes towns that start behind go step by step, and they stay behind. We use AI right where each gap is, while the foundations are built at the same time.</p>
+      <p class="muted">The usual plan makes towns that start behind go step by step, and they stay behind. The proposal is to use AI right where each gap is, while the foundations are built at the same time.</p>
+      <p class="future-note"><span class="tag-future">Future</span>Everything this guide says about AI is a picture of what could happen. It is not in use in this province today, and the results have not been measured.</p>
     </div>
     <div class="ai-teaser">
       <div class="path-card usual">
@@ -163,7 +169,8 @@
     <div class="map-layout">
       <div>
         <div class="map-stage">
-          <svg id="map-svg" viewBox="290 150 1030 740" data-zoom="province" data-lens="none" role="img" aria-label="Illustrated map of the Province of Bagong Pag-asa"></svg>
+          <div class="map-scroll" id="map-scroll"><svg id="map-svg" viewBox="290 150 1030 740" data-zoom="province" data-lens="none" role="img" aria-label="Illustrated map of the Province of Bagong Pag-asa"></svg></div>
+          <p class="swipe-hint">Swipe sideways to see the whole province</p>
           <div class="zoom-note" id="zoom-note"></div>
           <div class="legend" id="legend" hidden></div>
         </div>
@@ -192,14 +199,15 @@
   <section class="wrap" style="padding-bottom:24px">
     <div class="section-head">
       <p class="eyebrow">Close the gap with AI</p>
-      <h2>Catch up, and get ahead</h2>
+      <h2>Catch up, and keep up</h2>
       <p class="muted">Pick a place, then press Play. The dashed line is where every town should be. It keeps rising, because health needs and technology keep moving.</p>
+      <p class="future-note"><span class="tag-future">Future</span>This page shows what could happen, not what has happened. The AI tools here are not in use in this province today. Every score is made up to show the idea, and none of it is measured data.</p>
     </div>
     <div class="gap-top">
       <div style="display:grid;gap:16px">
         <div class="profiles" id="profiles"></div>
         <p class="summary-line" id="gap-summary" aria-live="polite"></p>
-        <p class="illus">Numbers are illustrative, made up to show the idea. They are not measured data.</p>
+        <p class="illus">Numbers are made up to show the idea. They are not measured data.</p>
       </div>
       <div class="chart-card">
         <svg id="gap-chart" viewBox="0 0 560 300" role="img" aria-label="Line chart comparing readiness over six years"></svg>
@@ -331,7 +339,7 @@
     <div class="section-head">
       <p class="eyebrow">The roadmap</p>
       <h2>Build the road and use AI at the same time</h2>
-      <p class="muted">Switch between the usual order and the leapfrog plan. Purple bars are AI helpers.</p>
+      <p class="muted">Switch between the usual order and the leapfrog plan. Tap any line to see the decision it needs and who makes it. Purple bars are AI helpers, which are a future proposal.</p>
     </div>
     <div class="mode-switch" role="group" aria-label="Which plan">
       <button type="button" id="rm-usual" aria-pressed="false">The usual order</button>
@@ -339,7 +347,8 @@
     </div>
     <div class="gantt-wrap"><div class="gantt" id="gantt"></div></div>
     <p class="summary-line" id="rm-summary" aria-live="polite"></p>
-    <p class="illus">Timelines are illustrative.</p>
+    <p class="illus">Timelines are examples, not commitments.</p>
+    <div class="rm-detail" id="rm-detail" aria-live="polite"></div>
   </section>
 
   <section class="wrap" aria-labelledby="h-stages">
@@ -354,12 +363,35 @@
 
   <section class="wrap" aria-labelledby="h-100">
     <div class="section-head">
-      <p class="eyebrow">For the Governor or Mayor</p>
-      <h2 id="h-100">The first 100 days</h2>
-      <p class="muted">Tick them off as you go. Your ticks are saved in this browser only.</p>
+      <p class="eyebrow">What happens first</p>
+      <h2 id="h-100">Everyone has a part in the first 100 days</h2>
+      <p class="muted">The Governor or Mayor, the Health Board, the health office, facility heads, health workers and families each have their own short list.</p>
     </div>
-    <ul class="checklist" id="first100"></ul>
-    <p class="in-short"><span>In short</span>Don't wait for perfect foundations before using AI. Build the shared road, the agreements and the fund while AI closes gaps from the first year.</p>
+    <a class="btn" href="#todo">See your list</a>
+    <p class="in-short"><span>In short</span>Don't wait for perfect foundations. Build the shared road, the agreements and the fund from the first year, and place AI helpers at the gaps as they prove safe.</p>
+  </section>
+</div>
+
+<!-- ================= YOUR PART ================= -->
+<div class="view" id="view-todo" hidden>
+  <section class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">Your part</p>
+      <h2>What do I need to do?</h2>
+      <p class="muted">Pick who you are. Each step says what to do, with whom, by when, what it costs, and how you know it is done.</p>
+    </div>
+    <div class="roles" id="roles" role="group" aria-label="Who are you?"></div>
+    <div class="role-head" id="role-head" aria-live="polite"></div>
+    <div class="todo-bar">
+      <p class="todo-progress" id="todo-progress" aria-live="polite"></p>
+      <div class="todo-btns">
+        <button type="button" class="btn ghost" id="print-role">Print my list</button>
+        <button type="button" class="btn ghost" id="print-all">Print all lists</button>
+      </div>
+    </div>
+    <div id="todo-list"></div>
+    <p class="illus">These are suggested first steps for the example province. They are not official DOH guidance. Costs are described in words because real amounts depend on your province. Your ticks are saved in this browser only.</p>
+    <p class="in-short"><span>In short</span>Leaders sign and fund. The health office lists and connects. Facilities plug in. Health workers record once and stay in charge. Families bring their ID and ask who sees their record.</p>
   </section>
 </div>
 
@@ -383,7 +415,23 @@
     <div class="ref-table-wrap"><table class="ref-table" id="refs"><thead><tr><th>Document</th><th>Year</th><th>Status</th></tr></thead><tbody></tbody></table></div>
   </section>
 </div>
+<nav class="wrap next-page" id="next-page" aria-label="Next page"></nav>
 </main>
+
+<aside class="tour" id="tour" hidden aria-label="Guided tour">
+  <div class="wrap tour-in">
+    <div class="tour-text" aria-live="polite">
+      <span class="tech" id="tour-count"></span>
+      <strong id="tour-title"></strong>
+      <p id="tour-text"></p>
+    </div>
+    <div class="tour-ctl">
+      <button type="button" class="btn ghost" id="tour-prev">Back</button>
+      <button type="button" class="btn" id="tour-next">Next</button>
+      <button type="button" class="tour-end" id="tour-end">End tour</button>
+    </div>
+  </div>
+</aside>
 
 <footer>
   <div class="wrap">
@@ -391,8 +439,11 @@
   </div>
 </footer>
 
+<div id="print-sheet"></div>
+
 <script src="assets/js/content.js"></script>
 <script src="assets/js/content2.js"></script>
+<script src="assets/js/content3.js"></script>
 <script src="assets/js/app.js"></script>
 </body>
 </html>
