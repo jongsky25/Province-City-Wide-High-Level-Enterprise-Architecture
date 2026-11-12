@@ -1,6 +1,6 @@
 # Plan: Connected Province/City-Wide Health System — Interactive Enterprise Architecture
 
-Status: **Draft for review** (planning phase, no pages built yet)
+Status: **Phase 4 prototype built** (Start, Province Map, Close the Gap). Research results are in `docs/references.md`.
 
 ---
 
@@ -103,7 +103,7 @@ The **Province/City-wide Health System EA** is the **local version** of the HSEA
 - The **architecture map** (page 3) uses the **HSEA's four tiers and 12 capabilities** as its *hidden backbone*. Readers see an **illustrated province**, and the HSEA box view appears only through a "Show the technical view" toggle (see section 2A). Each element is explained in terms of what it means *locally* and *for a person*.
 - A **"Zoom" control** reuses the deck's map comparison. It moves from the national HSEA (2 km) → province/city portfolio (100 m) → one local project such as the referral flow (5 m) → one RHU's EMR (street level).
 - A **"Who invests in what" toggle** shows the national-vs-local split: DOH builds the interoperability layer and national registries; the province/city runs local registries, its own systems and governance; facilities run point-of-service tools.
-- The **Aklan HIE pilot** is cited in the references as a real-world example. The scenarios themselves stay in the **fictional province and city**.
+- The **Aklan Local Health Information Exchange** (a pre-pilot led by UP NTHC with DOH and the province, per a July 2026 UP Manila report) is cited in the references as a real-world example. The scenarios themselves stay in the **fictional province and city**.
 - Pages will **cite** the DOH material as a source but will **not** use DOH logos or branding, and will not present themselves as an official DOH publication.
 
 ## 4. AI as the gap equalizer: catch up *and* get ahead (new core theme)
@@ -151,7 +151,7 @@ Primary legal and policy anchors to study and cite. Exact issuance numbers and s
 
 | Reference | What we take from it |
 |---|---|
-| **RA 11223 – UHC Act** and its **IRR** | P/CWHS (Sec. 19), Health Care Provider Networks, primary care and gatekeeping, Special Health Fund (Sec. 20), Health Information Systems (Sec. 36), PhilHealth population coverage, HTA, health promotion |
+| **RA 11223 – UHC Act** and its **IRR** | Population-based services (Sec. 17), individual-based services and provider networks (Sec. 18), P/CWHS (Sec. 19), Special Health Fund (Sec. 20), Health Information System (Sec. 36), PhilHealth population coverage, HTA, health promotion |
 | **DOH Health Sector Enterprise Architecture** (KMITS deck, user-provided) | Structure for the map; national-vs-local investment split; OpenHIE components |
 | **DOH AO on LHS integration into P/CWHS** (and related UHC AOs) | Management and technical integration, local health boards, LHS maturity levels |
 | **RA 7160 – Local Government Code** + **Mandanas-Garcia ruling / EO 138 (devolution)** | Roles of provinces, cities, municipalities and barangays; devolved health functions |

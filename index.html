@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Connected Province Health</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="A plain-language, playable guide to how a Philippine province- or city-wide health system should work under the Universal Health Care Act: connected, not integrated, with AI closing the gaps.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#start" aria-label="Connected Province Health, start page">
+      <svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><circle cx="15" cy="15" r="14" fill="var(--teal)"/><path d="M7 19 Q15 6 23 19" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/><circle cx="7" cy="19" r="2.6" fill="#fff"/><circle cx="15" cy="12.4" r="2.6" fill="#fff"/><circle cx="23" cy="19" r="2.6" fill="#fff"/></svg>
+      Connected Province Health
+    </a>
+    <nav class="nav" aria-label="Pages">
+      <a href="#start">Start here</a>
+      <a href="#map">Explore the province</a>
+      <a href="#gap">Close the gap with AI</a>
+      <span class="soon" title="Coming next">Journeys · Money · Roadmap · Glossary (soon)</span>
+    </nav>
+  </div>
+</header>
+
+<main>
+<!-- ================= START ================= -->
+<div class="view" id="view-start">
+  <div class="hero wrap">
+    <div class="hero-grid">
+      <div>
+        <p class="eyebrow">Universal Health Care, explained for everyone</p>
+        <h1>Every clinic keeps its own house. <em>All of them share one road.</em></h1>
+        <p class="lede">This is a plain guide to how a province or city health system should work under the Universal Health Care Act. Families, health workers, mayors and governors can see how the pieces connect, and how AI helps the towns that are behind get ahead.</p>
+        <div class="actions">
+          <a class="btn" href="#map">Explore the province</a>
+          <a class="btn ghost" href="#gap">See how AI closes the gaps</a>
+        </div>
+      </div>
+      <div class="hero-art" aria-hidden="true">
+        <svg viewBox="0 0 520 380">
+          <path class="wave" d="M20 340 q20 -10 40 0 t40 0"/><path class="wave" d="M420 40 q20 -10 40 0 t40 0"/>
+          <path class="island" d="M70 150 C110 90 230 100 300 115 C380 130 450 120 480 190 C505 250 470 320 390 335 C300 352 200 345 130 320 C60 296 40 210 70 150 Z"/>
+          <path class="road" d="M120 230 C150 160 250 150 300 170 C360 190 430 190 430 250 C430 300 330 305 270 295 C200 285 110 290 120 230 Z"/>
+          <path class="road-top" d="M120 230 C150 160 250 150 300 170 C360 190 430 190 430 250 C430 300 330 305 270 295 C200 285 110 290 120 230 Z"/>
+          <path class="flow flow-info" style="display:inline" d="M120 230 C150 160 250 150 300 170 C360 190 430 190 430 250 C430 300 330 305 270 295 C200 285 110 290 120 230 Z"/>
+          <path class="hub-link" d="M250 160 L250 52"/>
+          <g transform="translate(250 38)"><ellipse class="hub-cloud" rx="62" ry="24"/><text class="badge-t" font-size="13" y="1">National hub</text></g>
+          <g transform="translate(118 228)"><rect class="bldg-body" x="-18" y="-22" width="36" height="24" rx="2"/><path class="bldg-roof" d="M-21 -22 L0 -36 L21 -22 Z"/></g>
+          <g transform="translate(205 160)"><rect class="bldg-body" x="-22" y="-26" width="44" height="28" rx="2"/><path class="bldg-roof" d="M-25 -26 L0 -40 L25 -26 Z"/><circle class="badge" cx="0" cy="-12" r="8"/><text class="badge-t" font-size="12" y="-12">+</text></g>
+          <g transform="translate(330 176)"><rect class="bldg-body" x="-30" y="-36" width="60" height="38" rx="2"/><rect class="bldg-roof" x="-30" y="-40" width="60" height="6"/><circle class="badge" cx="0" cy="-17" r="9"/><text class="badge-t" font-size="13" y="-17">+</text></g>
+          <g transform="translate(430 252)"><rect class="bldg-body" x="-20" y="-24" width="40" height="26" rx="2"/><path class="bldg-roof" d="M-23 -24 L0 -36 L23 -24 Z"/><circle class="badge" cx="0" cy="-11" r="8"/><text class="badge-t" font-size="10" y="-11">₱</text></g>
+          <g transform="translate(270 297)"><rect class="bldg-body" x="-24" y="-28" width="48" height="30" rx="2"/><path class="bldg-roof" d="M-27 -28 L0 -40 L27 -28 Z"/><circle class="badge" cx="0" cy="-13" r="8"/><text class="badge-t" font-size="9" y="-13">Rx</text></g>
+          <g transform="translate(150 300)"><circle class="figure-head" cx="0" cy="-22" r="5"/><path class="figure-body" d="M-7 0 Q0 -18 7 0 Z"/><circle class="figure-head" cx="16" cy="-20" r="4.5"/><path class="figure-body" d="M10 0 Q16 -16 22 0 Z"/></g>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <section class="wrap" aria-labelledby="h-people">
+    <div class="section-head">
+      <p class="eyebrow">Start with people</p>
+      <h2 id="h-people">This is for Rosa, Lorna and the Governor</h2>
+      <p class="muted">A health system is easiest to understand through the people in it. Here are six of them in our example, the Province of Bagong Pag-asa.</p>
+    </div>
+    <div class="people" id="people"></div>
+  </section>
+
+  <section class="wrap" aria-labelledby="h-isnot">
+    <div class="section-head">
+      <p class="eyebrow">Clear up the confusion</p>
+      <h2 id="h-isnot">What this is not, and what it is</h2>
+      <p class="muted">Tap a card to flip it.</p>
+    </div>
+    <div class="isnot" id="isnot"></div>
+  </section>
+
+  <section class="wrap" aria-labelledby="h-sim">
+    <div class="section-head">
+      <p class="eyebrow">The big idea</p>
+      <h2 id="h-sim">Connected, not integrated</h2>
+      <p class="muted">There are three ways to run the health information of a province. Pick one, then cause an outage and see what happens.</p>
+    </div>
+    <div class="sim">
+      <div class="sim-stage"><svg id="sim-svg" viewBox="0 0 600 340" role="img" aria-label="Diagram of clinics and how they share information"></svg></div>
+      <div class="sim-side">
+        <div class="seg" id="sim-modes">
+          <button type="button" data-mode="alone" aria-pressed="false"><strong>Each on its own</strong><span>Every clinic has its own system. Nothing is shared.</span></button>
+          <button type="button" data-mode="one" aria-pressed="false"><strong>One big system</strong><span>Everyone must move into one central system.</span></button>
+          <button type="button" data-mode="connected" aria-pressed="true"><strong>Connected</strong><span>Each keeps its own system, and all use one shared road.</span></button>
+        </div>
+        <button type="button" class="btn outage" id="sim-outage">Cause an outage</button>
+        <p class="sim-msg" id="sim-msg" aria-live="polite"></p>
+      </div>
+    </div>
+    <p class="in-short"><span>In short</span>Towns, hospitals and clinics keep what they built. They share common rules, a common language and a few national lists. That is how one province-wide team works without one giant computer system.</p>
+  </section>
+
+  <section class="wrap" aria-labelledby="h-ai">
+    <div class="section-head">
+      <p class="eyebrow">Where AI fits</p>
+      <h2 id="h-ai">Don't wait in line. Close the gap now.</h2>
+      <p class="muted">The usual plan makes towns that start behind go step by step, and they stay behind. We use AI right where each gap is, while the foundations are built at the same time.</p>
+    </div>
+    <div class="ai-teaser">
+      <div class="path-card usual">
+        <h3>The usual way: one step at a time</h3>
+        <ol><li>Put everything on paper in order</li><li>Type it all into computers</li><li>Connect the computers</li><li>Hire analysts to study the data</li><li>Only then, maybe, use AI</li></ol>
+        <p class="muted">Each step waits for the last. Meanwhile, the goal keeps moving.</p>
+      </div>
+      <div class="path-card leap">
+        <h3>The leapfrog way: AI at every gap</h3>
+        <ol><li>AI reads paper records into digital ones</li><li>AI guides health workers where staff are few</li><li>AI matches messy records and speaks local languages</li><li>Leaders ask the scoreboard questions in plain words</li><li>All while the shared road is being built</li></ol>
+        <p>Like mobile phones that skipped landlines.</p>
+      </div>
+    </div>
+    <div class="hero actions" style="padding:0;margin-top:20px"><a class="btn" href="#gap">Play the two paths</a></div>
+  </section>
+</div>
+
+<!-- ================= MAP ================= -->
+<div class="view" id="view-map" hidden>
+  <div class="wrap">
+    <div class="map-head">
+      <div>
+        <p class="eyebrow">Explore the Province of Bagong Pag-asa</p>
+        <h2>Tap any place to see who is there, what goes wrong today, and how a connected system fixes it</h2>
+      </div>
+      <button type="button" class="btn" id="rosa-start">Follow Rosa's journey</button>
+    </div>
+    <div class="toolbar">
+      <div class="toolgroup" role="group" aria-label="Show">
+        <span class="label">Show</span>
+        <button type="button" class="chip" data-lens="none" aria-pressed="true">Places</button>
+        <button type="button" class="chip" data-lens="care" aria-pressed="false"><span class="dot" style="background:var(--teal)"></span>Care</button>
+        <button type="button" class="chip" data-lens="money" aria-pressed="false"><span class="dot" style="background:var(--sun)"></span>Money</button>
+        <button type="button" class="chip" data-lens="info" aria-pressed="false"><span class="dot" style="background:var(--sky)"></span>Information</button>
+        <button type="button" class="chip" data-lens="ai" aria-pressed="false"><span class="dot" style="background:var(--ai)"></span>AI helpers</button>
+        <button type="button" class="chip" data-lens="invest" aria-pressed="false">Who builds it</button>
+      </div>
+      <div class="toolgroup" role="group" aria-label="Zoom">
+        <span class="label">Zoom</span>
+        <button type="button" class="chip" data-zoom="country" aria-pressed="false">Country</button>
+        <button type="button" class="chip" data-zoom="province" aria-pressed="true">Province</button>
+        <button type="button" class="chip" data-zoom="town" aria-pressed="false">Town</button>
+        <button type="button" class="chip" data-zoom="clinic" aria-pressed="false">Clinic</button>
+      </div>
+      <div class="toolgroup">
+        <button type="button" class="chip" id="tech-toggle" aria-pressed="false">Show the technical view</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap" id="map-area">
+    <div class="map-layout">
+      <div>
+        <div class="map-stage">
+          <svg id="map-svg" viewBox="290 150 1030 740" data-zoom="province" data-lens="none" role="img" aria-label="Illustrated map of the Province of Bagong Pag-asa"></svg>
+          <div class="zoom-note" id="zoom-note"></div>
+          <div class="legend" id="legend" hidden></div>
+        </div>
+        <div class="rosa-card" id="rosa-card" hidden>
+            <span class="step" id="rosa-step"></span>
+            <strong id="rosa-title"></strong>
+            <p id="rosa-text"></p>
+            <p class="ai-line" id="rosa-ai"></p>
+            <div class="ctl">
+              <button type="button" class="btn ghost" id="rosa-prev">Back</button>
+              <button type="button" class="btn" id="rosa-next">Next</button>
+              <button type="button" class="btn ghost" id="rosa-close">Close</button>
+            </div>
+          </div>
+      </div>
+      <aside class="panel" id="panel" aria-live="polite"></aside>
+    </div>
+    <p class="in-short" style="margin-bottom:48px"><span>In short</span>Each place keeps its own tools. The shared road and the national lists let care, information and money move across the whole province, and AI helpers work at every stop.</p>
+  </div>
+
+  <div class="wrap tech-view" id="tech-view" hidden></div>
+</div>
+
+<!-- ================= GAP ================= -->
+<div class="view" id="view-gap" hidden>
+  <section class="wrap" style="padding-bottom:24px">
+    <div class="section-head">
+      <p class="eyebrow">Close the gap with AI</p>
+      <h2>Catch up, and get ahead</h2>
+      <p class="muted">Pick a place, then press Play. The dashed line is where every town should be. It keeps rising, because health needs and technology keep moving.</p>
+    </div>
+    <div class="gap-top">
+      <div style="display:grid;gap:16px">
+        <div class="profiles" id="profiles"></div>
+        <p class="summary-line" id="gap-summary" aria-live="polite"></p>
+        <p class="illus">Numbers are illustrative, made up to show the idea. They are not measured data.</p>
+      </div>
+      <div class="chart-card">
+        <svg id="gap-chart" viewBox="0 0 560 300" role="img" aria-label="Line chart comparing readiness over six years"></svg>
+        <div class="play-row">
+          <button type="button" class="btn" id="gap-play">Play</button>
+          <label for="gap-year" class="tech">Year</label>
+          <input type="range" id="gap-year" min="0" max="6" step="0.1" value="0">
+          <span class="yr-out" id="gap-year-out">Today</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap" style="padding-top:8px" aria-labelledby="h-caps">
+    <div class="section-head" style="margin-bottom:12px">
+      <h2 id="h-caps" style="font-size:1.4rem">The 12 questions every health system must answer</h2>
+      <div class="cap-legend"><span><i style="background:var(--bldg-edge)"></i>The usual way</span><span><i style="background:var(--ai)"></i>With AI</span><span><i style="background:var(--ink);width:2px;height:14px"></i>Where we should be</span></div>
+    </div>
+    <div class="caps" id="caps"></div>
+  </section>
+
+  <section class="wrap" aria-labelledby="h-eq">
+    <div class="section-head">
+      <p class="eyebrow">The equalizer</p>
+      <h2 id="h-eq">If each town buys its own AI, rich towns pull further ahead</h2>
+      <p class="muted">When the province and DOH offer AI as a shared service on the shared road, a remote island town gets the same tools as the city.</p>
+    </div>
+    <div class="eq">
+      <div class="eq-ctl">
+        <label for="eq-share"><strong>How AI is provided</strong></label>
+        <input type="range" id="eq-share" min="0" max="1" step="0.05" value="1">
+        <div class="eq-ends"><span>Each town buys its own</span><span>Shared by province and DOH</span></div>
+        <p class="eq-gap" id="eq-gap" aria-live="polite"></p>
+        <p class="illus">Readiness after 3 years (illustrative).</p>
+      </div>
+      <div class="eq-bars" id="eq-bars"></div>
+    </div>
+  </section>
+
+  <section class="wrap" aria-labelledby="h-gaps">
+    <div class="section-head">
+      <p class="eyebrow">Gap by gap</p>
+      <h2 id="h-gaps">Nine gaps, and how AI closes each one</h2>
+      <p class="muted">Open a card to compare the usual fix with the AI fix, what it needs, and its safeguard.</p>
+    </div>
+    <div class="gap-cards" id="gap-cards"></div>
+  </section>
+
+  <section class="wrap" aria-labelledby="h-limits">
+    <div class="section-head">
+      <p class="eyebrow">Honest limits</p>
+      <h2 id="h-limits">What AI can't do alone</h2>
+    </div>
+    <div class="limits">
+      <div><h3>AI needs the shared road</h3><p>Without one health ID, shared lists and common rules, AI becomes a set of small, separate pilots. Build both at the same time.</p></div>
+      <div><h3>People decide</h3><p>AI extends health workers. It does not replace them. A person makes every decision about care and money.</p></div>
+      <div><h3>Bad data, bad advice</h3><p>That's why the first AI jobs are reading and cleaning records.</p></div>
+      <div><h3>Privacy comes first</h3><p>Everything follows the Data Privacy Act. Only people with a right to see a record can see it.</p></div>
+      <div><h3>Fair to everyone</h3><p>AI is checked for bias, so it works as well for a fisherman in Isla Verde as for an office worker in the city.</p></div>
+      <div><h3>Shared, not bought alone</h3><p>Shared provincial and national AI services keep it from becoming one more advantage for richer towns.</p></div>
+    </div>
+    <p class="in-short"><span>In short</span>Waiting in line keeps poor towns behind. AI placed at each gap, offered as a shared service, lets every town catch up and get ahead, with people still in charge.</p>
+  </section>
+</div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>An explainer based on the Universal Health Care Act (RA 11223, Secs. 17–20 and 36) and the DOH Health Sector Enterprise Architecture. It is not an official DOH publication. The Province of Bagong Pag-asa, Mabuhay City, the people, and all numbers are fictional examples.</p>
+  </div>
+</footer>
+
+<script src="assets/js/content.js"></script>
+<script src="assets/js/app.js"></script>
+</body>
+</html>
